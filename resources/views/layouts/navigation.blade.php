@@ -89,7 +89,7 @@
                 {{ __('Columbary') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('columbary.index')" :active="request()->routeIs('columbary.list')">
+            <x-responsive-nav-link :href="route('columbary.list')" :active="request()->routeIs('columbary.list')">
                 {{ __('Manage Slots') }}
             </x-responsive-nav-link>
         </div>
