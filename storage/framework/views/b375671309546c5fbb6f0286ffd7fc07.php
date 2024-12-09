@@ -1,0 +1,2 @@
+<img src="<?php echo e(asset('favicon.png')); ?>" <?php echo e($attributes); ?> alt="MSOS">
+<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\resources\views/components/application-logo.blade.php ENDPATH**/ ?>

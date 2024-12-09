@@ -1,0 +1,127 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Columbary Slots') }}
+        </h2>
+    </x-slot>
+    <div class="max-w-7xl container mx-auto p-4">
+        @foreach ($slots as $floor => $floorSlots)
+            <div class="floor mb-6">
+                <h2 class="text-xl text-white font-semibold mb-2">Floor {{ $floor }}</h2>
+                <div class="slots flex flex-wrap gap-2">
+                    @foreach ($floorSlots as $slot)
+                        <div 
+                            class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer {{ strtolower(str_replace(' ', '-', $slot->status)) }}"
+                            data-slot-id="{{ $slot->id }}"
+                            data-slot-number="{{ $slot->slot_number }}">
+                            {{ $slot->slot_number }}
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <!-- Modal -->
+    <div id="reservationModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <div class="modal-header flex justify-between items-center border-b pb-3">
+                <h5 id="reservationModalLabel" class="text-xl font-semibold">Reserve Slot</h5>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="modal-body mt-4">
+                <form id="reservationForm">
+                    @csrf
+                    <input type="hidden" name="slot_id" id="slotId">
+                    <div class="mb-4">
+                        <label for="buyerName" class="block text-sm font-medium mb-1">Your Name</label>
+                        <input type="text" class="form-input w-full rounded border-gray-300" id="buyerName" name="buyer_name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="contactInfo" class="block text-sm font-medium mb-1">Contact Number</label>
+                        <input type="text" class="form-input w-full rounded border-gray-300" id="contactInfo" name="contact_info" required>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancelModal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Close</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Reserve</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .slot.available {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .slot.reserved {
+            background-color: #3b82f6;
+            color: #ffffff;
+        }
+        .slot.sold {
+            background-color: #facc15;
+        }
+        .slot.not-available {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+        .slot:not(.available) {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slots = document.querySelectorAll('.slot.available');
+            const modal = document.getElementById('reservationModal');
+            const closeModalButton = document.getElementById('closeModal');
+            const cancelModalButton = document.getElementById('cancelModal');
+            const reservationForm = document.getElementById('reservationForm');
+            const slotIdInput = document.getElementById('slotId');
+            const buyerNameInput = document.getElementById('buyerName');
+            const contactInfoInput = document.getElementById('contactInfo');
+
+            // Open modal
+            slots.forEach(slot => {
+                slot.addEventListener('click', function () {
+                    const slotId = this.getAttribute('data-slot-id');
+                    const slotNumber = this.getAttribute('data-slot-number');
+                    document.getElementById('reservationModalLabel').innerText = `Reserve Slot ${slotNumber}`;
+                    slotIdInput.value = slotId;
+                    buyerNameInput.value = '';
+                    contactInfoInput.value = '';
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            // Close modal
+            [closeModalButton, cancelModalButton].forEach(button => {
+                button.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+            });
+
+            // Handle form submission
+            reservationForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch("{{ route('reserve.slot') }}", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    location.reload(); // Reload to update the slots
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</x-app-layout>
