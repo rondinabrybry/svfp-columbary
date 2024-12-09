@@ -1,25 +1,36 @@
-<x-app-layout>
-    <x-slot name="header">
+<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
+<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('app-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('header', null, []); ?> 
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Columbary Slots') }}
+            <?php echo e(__('Columbary Slots')); ?>
+
         </h2>
-    </x-slot>
+     <?php $__env->endSlot(); ?>
     <div class="max-w-7xl text-black dark:text-white container mx-auto p-4">
-        @foreach ($slots as $floor => $floorSlots)
+        <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="floor mb-6">
-                <h2 class="text-xl text-black dark:text-white font-semibold mb-2">Floor {{ $floor }}</h2>
+                <h2 class="text-xl text-black dark:text-white font-semibold mb-2">Floor <?php echo e($floor); ?></h2>
                 <div class="slots flex flex-wrap gap-2">
-                    @foreach ($floorSlots as $slot)
+                    <?php $__currentLoopData = $floorSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div 
-                            class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer {{ strtolower(str_replace(' ', '-', $slot->status)) }}"
-                            data-slot-id="{{ $slot->id }}"
-                            data-slot-number="{{ $slot->slot_number }}">
-                            {{ $slot->slot_number }}
+                            class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer <?php echo e(strtolower(str_replace(' ', '-', $slot->status))); ?>"
+                            data-slot-id="<?php echo e($slot->id); ?>"
+                            data-slot-number="<?php echo e($slot->slot_number); ?>">
+                            <?php echo e($slot->slot_number); ?>
+
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <!-- Modal -->
@@ -31,7 +42,7 @@
             </div>
             <div class="modal-body mt-4">
                 <form id="reservationForm">
-                    @csrf
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="slot_id" id="slotId">
                     <div class="mb-4">
                         <label for="buyerName" class="block text-sm font-medium mb-1">Your Name</label>
@@ -108,7 +119,7 @@
                 e.preventDefault();
                 const formData = new FormData(this);
 
-                fetch("{{ route('reserve.slot') }}", {
+                fetch("<?php echo e(route('reserve.slot')); ?>", {
                     method: "POST",
                     body: formData,
                     headers: {
@@ -124,4 +135,14 @@
             });
         });
     </script>
-</x-app-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/home.blade.php ENDPATH**/ ?>

@@ -1,36 +1,48 @@
-<x-app-layout>
-    <x-slot name="header">
+<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
+<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('app-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('header', null, []); ?> 
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Columbary Slots') }}
+            <?php echo e(__('Columbary Slots')); ?>
+
         </h2>
-    </x-slot>
+     <?php $__env->endSlot(); ?>
 <div class="py-12">
     <div class="max-w-7xl container mx-auto p-4">
         <!-- Success/Error Messages -->
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
-                {{ session('success') }}
+                <?php echo e(session('success')); ?>
+
             </div>
-        @endif
-        @if(session('error'))
+        <?php endif; ?>
+        <?php if(session('error')): ?>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                {{ session('error') }}
+                <?php echo e(session('error')); ?>
+
             </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Floors Section -->
-        @foreach($slots as $floor => $floorSlots)
+        <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="mb-6 text-black dark:text-white">
             <!-- Collapsible Header -->
             <button 
                 class="w-full flex justify-between items-center bg-blue-500 text-white px-4 py-3 rounded-lg shadow focus:outline-none"
-                onclick="toggleCollapse('floor-{{ $floor }}')">
-                <span>Floor {{ $floor }}</span>
+                onclick="toggleCollapse('floor-<?php echo e($floor); ?>')">
+                <span>Floor <?php echo e($floor); ?></span>
                 <span>&#9660;</span>
             </button>
 
             <!-- Collapsible Content -->
-            <div id="floor-{{ $floor }}" class="hidden mt-2">
+            <div id="floor-<?php echo e($floor); ?>" class="hidden mt-2">
                 <div class="overflow-x-auto">
                     <table class="table-auto w-full border-collapse border border-gray-300">
                         <thead>
@@ -44,25 +56,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($floorSlots as $slot)
+                            <?php $__currentLoopData = $floorSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="text-black dark:text-white hover:bg-gray-400">
-                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $slot->slot_number }}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center"><?php echo e($slot->slot_number); ?></td>
                                 <td class="border border-gray-300 px-4 py-2">
                                     <span class="px-2 py-1 rounded-full text-white 
-                                        {{ $slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500') }}">
-                                        {{ $slot->status }}
+                                        <?php echo e($slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500')); ?>">
+                                        <?php echo e($slot->status); ?>
+
                                     </span>
                                 </td>
-                                <td class="border border-gray-300 px-4 py-2">₱{{ number_format($slot->price, 2) }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $slot->payment->buyer_name ?? 'N/A' }}</td>
+                                <td class="border border-gray-300 px-4 py-2">₱<?php echo e(number_format($slot->price, 2)); ?></td>
+                                <td class="border border-gray-300 px-4 py-2"><?php echo e($slot->payment->buyer_name ?? 'N/A'); ?></td>
                                 <td class="border border-gray-300 px-4 py-2">
-                                    {{ $slot->payment->payment_status ?? 'N/A' }}
+                                    <?php echo e($slot->payment->payment_status ?? 'N/A'); ?>
+
                                 </td>
                                 <td class="border border-gray-300 px-4 py-2">
-                                    @if($slot->status === 'Available')
+                                    <?php if($slot->status === 'Available'): ?>
                                     <!-- Reservation Form -->
-                                    <form action="{{ route('columbary.reserve', $slot->id) }}" method="POST" class="flex items-center gap-2">
-                                        @csrf
+                                    <form action="<?php echo e(route('columbary.reserve', $slot->id)); ?>" method="POST" class="flex items-center gap-2">
+                                        <?php echo csrf_field(); ?>
                                         <input type="text" name="buyer_name" placeholder="Buyer Name" required
                                             class="text-black border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring focus:border-blue-500">
                                         <input type="number" name="contact_info" placeholder="Contact Info" required
@@ -72,33 +86,33 @@
                                             Reserve
                                         </button>
                                     </form>
-                                    @elseif($slot->status === 'Reserved')
+                                    <?php elseif($slot->status === 'Reserved'): ?>
                                     <!-- View Client Info Button -->
-                                    <button onclick="openModal({{ $slot->id }})"
+                                    <button onclick="openModal(<?php echo e($slot->id); ?>)"
                                         class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                                         View
                                     </button>
 
-                                    <form action="{{ route('columbary.paid', $slot->payment->id) }}" method="POST" class="inline-block">
-                                        @csrf
+                                    <form action="<?php echo e(route('columbary.paid', $slot->payment->id)); ?>" method="POST" class="inline-block">
+                                        <?php echo csrf_field(); ?>
                                         <button type="submit" 
                                                 class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
                                                 onclick="return confirm('Mark this slot as paid?')">
                                             Mark as Paid
                                         </button>
                                     </form>
-                                @endif
+                                <?php endif; ?>
                                     
                                 </td>
                                 
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 <!-- Modal -->
 <div id="client-info-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden z-50 flex justify-center items-center">
@@ -159,4 +173,14 @@ function closeModal() {
             element.classList.toggle('hidden');
         }
     </script>
-</x-app-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/columbary/index.blade.php ENDPATH**/ ?>
