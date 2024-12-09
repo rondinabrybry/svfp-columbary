@@ -53,40 +53,43 @@
             <!-- Recent Payments -->
             <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <h3 class="text-lg font-semibold mb-4">Recent Payments</h3>
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="text-left p-2">Slot Number</th>
-                            <th class="text-left p-2">Buyer Name</th>
-                            <th class="text-left p-2">Contact Info</th>
-                            <th class="text-left p-2">Price</th>
-                            <th class="text-left p-2">Payment Status</th>
-                            <th class="text-left p-2">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($recentPayments as $payment)
-                            <tr class="border-b hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="p-2">{{ $payment->columbarySlot->slot_number }}</td>
-                                <td class="p-2">{{ $payment->buyer_name }}</td>
-                                <td class="p-2">{{ $payment->contact_info }}</td>
-                                <td class="p-2">₱{{ number_format($payment->columbarySlot->price, 2) }}</td> 
-                                <td class="p-2">
-                                    <span
-                                        class="{{ $payment->payment_status == 'Paid'
-                                            ? 'text-green-600'
-                                            : ($payment->payment_status == 'Reserved'
-                                                ? 'text-yellow-600'
-                                                : 'text-red-600') }}">
-                                        {{ $payment->payment_status }}
-                                    </span>
-                                </td>
-                                <td class="p-2">{{ $payment->created_at->format('M d, Y') }}</td>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left p-2">Slot Number</th>
+                                <th class="text-left p-2">Buyer Name</th>
+                                <th class="text-left p-2">Contact Info</th>
+                                <th class="text-left p-2">Price</th>
+                                <th class="text-left p-2">Payment Status</th>
+                                <th class="text-left p-2">Date</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($recentPayments as $payment)
+                                <tr class="border-b hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <td class="p-2">{{ $payment->columbarySlot->slot_number }}</td>
+                                    <td class="p-2">{{ $payment->buyer_name }}</td>
+                                    <td class="p-2">{{ $payment->contact_info }}</td>
+                                    <td class="p-2">₱{{ number_format($payment->columbarySlot->price, 2) }}</td> 
+                                    <td class="p-2">
+                                        <span
+                                            class="{{ $payment->payment_status == 'Paid'
+                                                ? 'text-green-600'
+                                                : ($payment->payment_status == 'Reserved'
+                                                    ? 'text-yellow-600'
+                                                    : 'text-red-600') }}">
+                                            {{ $payment->payment_status }}
+                                        </span>
+                                    </td>
+                                    <td class="p-2">{{ $payment->created_at->format('M d, Y') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            
 
             <!-- Slot Status and Payment Status Charts -->
             <div class="mt-6 grid md:grid-cols-2 gap-6">
