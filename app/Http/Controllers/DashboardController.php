@@ -20,14 +20,27 @@ class DashboardController extends Controller
         $reservedSlots = ColumbarySlot::where('status', 'Reserved')->count();
         $soldSlots = ColumbarySlot::where('status', 'Sold')->count();
 
-        // Slots by Floor Statistics
-        $slotsByFloor = ColumbarySlot::select('floor_number')
+    // Slots by Floor and Vault Statistics with Pagination
+    $slotsByFloorAndVault = ColumbarySlot::select('floor_number', 'vault_number')
+        ->selectRaw('COUNT(*) as total_slots')
+        ->selectRaw('SUM(CASE WHEN status = "Available" THEN 1 ELSE 0 END) as available_slots')
+        ->selectRaw('SUM(CASE WHEN status = "Not Available" THEN 1 ELSE 0 END) as notAvailable_slots')
+        ->selectRaw('SUM(CASE WHEN status = "Reserved" THEN 1 ELSE 0 END) as reserved_slots')
+        ->selectRaw('SUM(CASE WHEN status = "Sold" THEN 1 ELSE 0 END) as sold_slots')
+        ->groupBy('floor_number', 'vault_number')
+        ->orderBy('floor_number')
+        ->orderBy('vault_number')
+        ->paginate(5); // Adjust the number to change items per page
+
+        // Floor-level aggregation
+        $floorSummary = ColumbarySlot::select('floor_number')
             ->selectRaw('COUNT(*) as total_slots')
             ->selectRaw('SUM(CASE WHEN status = "Available" THEN 1 ELSE 0 END) as available_slots')
             ->selectRaw('SUM(CASE WHEN status = "Not Available" THEN 1 ELSE 0 END) as notAvailable_slots')
             ->selectRaw('SUM(CASE WHEN status = "Reserved" THEN 1 ELSE 0 END) as reserved_slots')
             ->selectRaw('SUM(CASE WHEN status = "Sold" THEN 1 ELSE 0 END) as sold_slots')
             ->groupBy('floor_number')
+            ->orderBy('floor_number')
             ->get();
 
         // Payment Statistics
@@ -52,7 +65,8 @@ class DashboardController extends Controller
             'notAvailableSlots' => $notAvailableSlots,
             'reservedSlots' => $reservedSlots,
             'soldSlots' => $soldSlots,
-            'slotsByFloor' => $slotsByFloor,
+            'slotsByFloor' => $floorSummary,
+            'slotsByFloorAndVault' => $slotsByFloorAndVault,
             'totalPayments' => $totalPayments,
             'paymentStatusDistribution' => $paymentStatusDistribution,
             'recentPayments' => $recentPayments,

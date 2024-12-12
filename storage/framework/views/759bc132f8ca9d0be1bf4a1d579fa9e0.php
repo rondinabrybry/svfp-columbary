@@ -24,8 +24,7 @@
                     <div class="space-y-2">
                         <p>Total Slots: <span class="font-bold"><?php echo e($totalSlots); ?></span></p>
                         <p>Available Slots: <span class="font-bold text-green-600"><?php echo e($availableSlots); ?></span></p>
-                        <p>Not Available Slots: <span class="font-bold text-green-600"><?php echo e($notAvailableSlots); ?></span>
-                        </p>
+                        <p>Not Available Slots: <span class="font-bold text-red-600"><?php echo e($notAvailableSlots); ?></span></p>
                         <p>Reserved Slots: <span class="font-bold text-yellow-600"><?php echo e($reservedSlots); ?></span></p>
                         <p>Sold Slots: <span class="font-bold text-blue-600"><?php echo e($soldSlots); ?></span></p>
                     </div>
@@ -36,29 +35,67 @@
                     <h3 class="text-lg font-semibold mb-4">Financial Summary</h3>
                     <div class="space-y-2">
                         <p>Total Payments: <span class="font-bold"><?php echo e($totalPayments); ?></span></p>
-                        <p>Total Value of Sold Slots: <span
-                                class="font-bold text-green-600">₱<?php echo e(number_format($totalValueOfSoldSlots, 2)); ?></span>
-                        </p>
+                        <p>Total Value of Sold Slots: <span class="font-bold text-green-600">₱<?php echo e(number_format($totalValueOfSoldSlots, 2)); ?></span></p>
                     </div>
                 </div>
 
-                <!-- Slot Occupancy by Floor Card -->
+                <!-- Slots by Floor Card -->
                 <div class="bg-white text-black dark:text-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-4">Slots by Floor</h3>
                     <div class="space-y-2">
                         <?php $__currentLoopData = $slotsByFloor; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <p class="text-sm">Floor <?php echo e($floor->floor_number); ?>: (Total: <?php echo e($floor->total_slots); ?>) <br>
                                 <div class="text-sm">
-                                <span class="text-green-600"><?php echo e($floor->available_slots); ?> Available</span> |
-                                <span class="text-red-600"><?php echo e($floor->notAvailable_slots); ?> Not Available</span> |
-                                <span class="text-yellow-600"><?php echo e($floor->reserved_slots); ?> Reserved</span> |
-                                <span class="text-blue-600"><?php echo e($floor->sold_slots); ?> Sold</span>
-                            </div>
+                                    <span class="text-green-600"><?php echo e($floor->available_slots); ?> Available</span> |
+                                    <span class="text-red-600"><?php echo e($floor->notAvailable_slots); ?> Not Available</span> |
+                                    <span class="text-yellow-600"><?php echo e($floor->reserved_slots); ?> Reserved</span> |
+                                    <span class="text-blue-600"><?php echo e($floor->sold_slots); ?> Sold</span>
+                                </div>
                             </p>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
+
+<!-- Vault Details -->
+<div class="mt-6 text-black dark:text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+    <h3 class="text-lg font-semibold mb-4">Vault Details</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="border-b">
+                    <th class="text-left p-2">Floor</th>
+                    <th class="text-left p-2">Vault</th>
+                    <th class="text-left p-2">Total Slots</th>
+                    <th class="text-left p-2">Available</th>
+                    <th class="text-left p-2">Not Available</th>
+                    <th class="text-left p-2">Reserved</th>
+                    <th class="text-left p-2">Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $__currentLoopData = $slotsByFloorAndVault; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr class="border-b hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <td class="p-2"><?php echo e($vault->floor_number); ?></td>
+                        <td class="p-2"><?php echo e($vault->vault_number); ?></td>
+                        <td class="p-2"><?php echo e($vault->total_slots); ?></td>
+                        <td class="p-2 text-green-600"><?php echo e($vault->available_slots); ?></td>
+                        <td class="p-2 text-red-600"><?php echo e($vault->notAvailable_slots); ?></td>
+                        <td class="p-2 text-yellow-600"><?php echo e($vault->reserved_slots); ?></td>
+                        <td class="p-2 text-blue-600"><?php echo e($vault->sold_slots); ?></td>
+                    </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </tbody>
+        </table>
+
+        <!-- Pagination Links -->
+        <div class="mt-4">
+            <?php echo e($slotsByFloorAndVault->links()); ?>
+
+        </div>
+    </div>
+</div>
+
 
             <!-- Recent Payments -->
             <div class="mt-6 text-black dark:text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -100,7 +137,6 @@
                     </table>
                 </div>
             </div>
-            
 
             <!-- Slot Status and Payment Status Charts -->
             <div class="mt-6 text-black dark:text-white grid md:grid-cols-2 gap-6">
@@ -161,5 +197,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/dashboard.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/dashboard.blade.php ENDPATH**/ ?>

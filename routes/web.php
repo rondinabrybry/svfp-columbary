@@ -24,7 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/columbary/list', [ColumbaryController::class, 'listSlots'])->name('columbary.list');
     Route::get('/columbary/edit/{id}', [ColumbaryController::class, 'edit'])->name('columbary.edit');
     Route::put('/columbary/update/{id}', [ColumbaryController::class, 'update'])->name('columbary.update');
-    Route::delete('/columbary/delete/{id}', [ColumbaryController::class, 'delete'])->name('columbary.delete');
+
+    Route::patch('/columbary/{id}/mark-not-available', [ColumbaryController::class, 'markNotAvailable'])
+    ->name('columbary.markNotAvailable');
+
     Route::post('/columbary/create-slots', [ColumbaryController::class, 'createSlots'])->name('columbary.create-slots');
 
     Route::get('/home', [HomeController::class, 'showSlots'])->name('home');

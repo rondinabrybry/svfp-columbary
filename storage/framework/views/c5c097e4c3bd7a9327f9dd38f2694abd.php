@@ -14,18 +14,32 @@
 
         </h2>
      <?php $__env->endSlot(); ?>
-    <div class="max-w-7xl text-black dark:text-white container mx-auto p-4">
-        <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="floor mb-6">
-                <h2 class="text-xl text-black dark:text-white font-semibold mb-2">Floor <?php echo e($floor); ?></h2>
-                <div class="slots flex flex-wrap gap-2">
-                    <?php $__currentLoopData = $floorSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div 
-                            class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer <?php echo e(strtolower(str_replace(' ', '-', $slot->status))); ?>"
-                            data-slot-id="<?php echo e($slot->id); ?>"
-                            data-slot-number="<?php echo e($slot->slot_number); ?>">
-                            <?php echo e($slot->slot_number); ?>
 
+    <div class="max-w-7xl text-black dark:text-white container mx-auto p-4">
+        <div class="legends flex flex-row gap-2 mb-4">
+            <p class="text-xs bg-white p-2 text-black font-bold rounded-lg">Available</p>
+            <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg">Not Available</p>
+            <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg">Reserved</p>
+            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">Sold</p>
+        </div>
+        <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="floor mb-8">
+                <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
+                <div class="vaults flex flex-wrap gap-6">
+                    <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="vault border rounded-lg p-4">
+                            <h3 class="text-lg font-medium mb-2 text-center">Vault <?php echo e($vault); ?></h3>
+                            <div class="slots grid grid-rows-6 gap-2">
+                                <?php $__currentLoopData = $vaultSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div 
+                                        class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer <?php echo e(strtolower(str_replace(' ', '-', $slot->status))); ?>"
+                                        data-slot-id="<?php echo e($slot->id); ?>"
+                                        data-slot-number="<?php echo e($slot->slot_number); ?>">
+                                        <?php echo e($slot->slot_number); ?>
+
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </div>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
@@ -33,7 +47,7 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal (remains the same as in the previous version) -->
     <div id="reservationModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
             <div class="modal-header flex justify-between items-center border-b pb-3">
@@ -80,6 +94,15 @@
         .slot:not(.available) {
             pointer-events: none;
             opacity: 0.5;
+        }
+        .vaults {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .vault {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 

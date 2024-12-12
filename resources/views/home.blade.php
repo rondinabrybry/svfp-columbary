@@ -4,17 +4,31 @@
             {{ __('Columbary Slots') }}
         </h2>
     </x-slot>
+
     <div class="max-w-7xl text-black dark:text-white container mx-auto p-4">
-        @foreach ($slots as $floor => $floorSlots)
-            <div class="floor mb-6">
-                <h2 class="text-xl text-black dark:text-white font-semibold mb-2">Floor {{ $floor }}</h2>
-                <div class="slots flex flex-wrap gap-2">
-                    @foreach ($floorSlots as $slot)
-                        <div 
-                            class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer {{ strtolower(str_replace(' ', '-', $slot->status)) }}"
-                            data-slot-id="{{ $slot->id }}"
-                            data-slot-number="{{ $slot->slot_number }}">
-                            {{ $slot->slot_number }}
+        <div class="legends flex flex-row gap-2 mb-4">
+            <p class="text-xs bg-white p-2 text-black font-bold rounded-lg">Available</p>
+            <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg">Not Available</p>
+            <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg">Reserved</p>
+            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">Sold</p>
+        </div>
+        @foreach ($slots as $floor => $floorVaults)
+            <div class="floor mb-8">
+                <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor {{ $floor }}</h2>
+                <div class="vaults flex flex-wrap gap-6">
+                    @foreach ($floorVaults as $vault => $vaultSlots)
+                        <div class="vault border rounded-lg p-4">
+                            <h3 class="text-lg font-medium mb-2 text-center">Vault {{ $vault }}</h3>
+                            <div class="slots grid grid-rows-6 gap-2">
+                                @foreach ($vaultSlots as $slot)
+                                    <div 
+                                        class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer {{ strtolower(str_replace(' ', '-', $slot->status)) }}"
+                                        data-slot-id="{{ $slot->id }}"
+                                        data-slot-number="{{ $slot->slot_number }}">
+                                        {{ $slot->slot_number }}
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -22,7 +36,7 @@
         @endforeach
     </div>
 
-    <!-- Modal -->
+    <!-- Modal (remains the same as in the previous version) -->
     <div id="reservationModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
             <div class="modal-header flex justify-between items-center border-b pb-3">
@@ -69,6 +83,15 @@
         .slot:not(.available) {
             pointer-events: none;
             opacity: 0.5;
+        }
+        .vaults {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .vault {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 

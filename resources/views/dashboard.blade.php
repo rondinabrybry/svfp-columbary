@@ -14,8 +14,7 @@
                     <div class="space-y-2">
                         <p>Total Slots: <span class="font-bold">{{ $totalSlots }}</span></p>
                         <p>Available Slots: <span class="font-bold text-green-600">{{ $availableSlots }}</span></p>
-                        <p>Not Available Slots: <span class="font-bold text-green-600">{{ $notAvailableSlots }}</span>
-                        </p>
+                        <p>Not Available Slots: <span class="font-bold text-red-600">{{ $notAvailableSlots }}</span></p>
                         <p>Reserved Slots: <span class="font-bold text-yellow-600">{{ $reservedSlots }}</span></p>
                         <p>Sold Slots: <span class="font-bold text-blue-600">{{ $soldSlots }}</span></p>
                     </div>
@@ -26,29 +25,66 @@
                     <h3 class="text-lg font-semibold mb-4">Financial Summary</h3>
                     <div class="space-y-2">
                         <p>Total Payments: <span class="font-bold">{{ $totalPayments }}</span></p>
-                        <p>Total Value of Sold Slots: <span
-                                class="font-bold text-green-600">₱{{ number_format($totalValueOfSoldSlots, 2) }}</span>
-                        </p>
+                        <p>Total Value of Sold Slots: <span class="font-bold text-green-600">₱{{ number_format($totalValueOfSoldSlots, 2) }}</span></p>
                     </div>
                 </div>
 
-                <!-- Slot Occupancy by Floor Card -->
+                <!-- Slots by Floor Card -->
                 <div class="bg-white text-black dark:text-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-4">Slots by Floor</h3>
                     <div class="space-y-2">
                         @foreach ($slotsByFloor as $floor)
                             <p class="text-sm">Floor {{ $floor->floor_number }}: (Total: {{ $floor->total_slots }}) <br>
                                 <div class="text-sm">
-                                <span class="text-green-600">{{ $floor->available_slots }} Available</span> |
-                                <span class="text-red-600">{{ $floor->notAvailable_slots }} Not Available</span> |
-                                <span class="text-yellow-600">{{ $floor->reserved_slots }} Reserved</span> |
-                                <span class="text-blue-600">{{ $floor->sold_slots }} Sold</span>
-                            </div>
+                                    <span class="text-green-600">{{ $floor->available_slots }} Available</span> |
+                                    <span class="text-red-600">{{ $floor->notAvailable_slots }} Not Available</span> |
+                                    <span class="text-yellow-600">{{ $floor->reserved_slots }} Reserved</span> |
+                                    <span class="text-blue-600">{{ $floor->sold_slots }} Sold</span>
+                                </div>
                             </p>
                         @endforeach
                     </div>
                 </div>
             </div>
+
+<!-- Vault Details -->
+<div class="mt-6 text-black dark:text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+    <h3 class="text-lg font-semibold mb-4">Vault Details</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="border-b">
+                    <th class="text-left p-2">Floor</th>
+                    <th class="text-left p-2">Vault</th>
+                    <th class="text-left p-2">Total Slots</th>
+                    <th class="text-left p-2">Available</th>
+                    <th class="text-left p-2">Not Available</th>
+                    <th class="text-left p-2">Reserved</th>
+                    <th class="text-left p-2">Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($slotsByFloorAndVault as $vault)
+                    <tr class="border-b hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <td class="p-2">{{ $vault->floor_number }}</td>
+                        <td class="p-2">{{ $vault->vault_number }}</td>
+                        <td class="p-2">{{ $vault->total_slots }}</td>
+                        <td class="p-2 text-green-600">{{ $vault->available_slots }}</td>
+                        <td class="p-2 text-red-600">{{ $vault->notAvailable_slots }}</td>
+                        <td class="p-2 text-yellow-600">{{ $vault->reserved_slots }}</td>
+                        <td class="p-2 text-blue-600">{{ $vault->sold_slots }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Pagination Links -->
+        <div class="mt-4">
+            {{ $slotsByFloorAndVault->links() }}
+        </div>
+    </div>
+</div>
+
 
             <!-- Recent Payments -->
             <div class="mt-6 text-black dark:text-white bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -89,7 +125,6 @@
                     </table>
                 </div>
             </div>
-            
 
             <!-- Slot Status and Payment Status Charts -->
             <div class="mt-6 text-black dark:text-white grid md:grid-cols-2 gap-6">

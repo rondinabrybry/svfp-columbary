@@ -12,6 +12,7 @@ class CreateColumbarySlotsTable extends Migration
             $table->id();
             $table->integer('slot_number')->unique();
             $table->integer('floor_number');
+            $table->integer('vault_number');
             $table->enum('status', ['Available', 'Reserved', 'Sold', 'Not Available'])->default('Available');
             $table->decimal('price', 10, 2);
             $table->timestamps();
