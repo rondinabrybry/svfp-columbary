@@ -22,52 +22,53 @@
             <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg">Reserved</p>
             <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">Sold</p>
         </div>
+
+        <style>
+            .slots {
+                display: flex;
+                flex-direction: row; /* Align columns horizontally */
+                gap: 1rem; /* Gap between columns */
+            }
+
+            .column {
+                display: flex;
+                flex-direction: column; /* Align slots vertically */
+                gap: 0.5rem; /* Gap between slots */
+            }
+            .vaults {
+                overflow-x: auto;
+            }
+            .slot {
+                display: flex; /* Flexbox for centering content */
+                align-items: center;
+                justify-content: center;
+                width: 3rem; /* Fixed width */
+                height: 3rem; /* Fixed height */
+                border: 1px solid #000; /* Example border for visibility */
+                text-align: center;
+                font-size: 0.875rem; /* Text size */
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            /* Dynamic styling based on status */
+            .active {
+                background-color: #4caf50;
+                color: white;
+            }
+
+            .inactive {
+                background-color: #f44336;
+                color: white;
+            }
+        </style>
         <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <div class="floor mb-8">
         <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
         <div class="vaults flex flex-wrap gap-6">
             <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="vault border rounded-lg p-4">
-                    <h3 class="text-lg font-medium mb-2 text-center">Rack <?php echo e($vault); ?></h3>
-                    
-                    <style>
-                        .slots {
-                            display: flex;
-                            flex-direction: row; /* Align columns horizontally */
-                            gap: 1rem; /* Gap between columns */
-                        }
-
-                        .column {
-                            display: flex;
-                            flex-direction: column; /* Align slots vertically */
-                            gap: 0.5rem; /* Gap between slots */
-                        }
-
-                        .slot {
-                            display: flex; /* Flexbox for centering content */
-                            align-items: center;
-                            justify-content: center;
-                            width: 3rem; /* Fixed width */
-                            height: 3rem; /* Fixed height */
-                            border: 1px solid #000; /* Example border for visibility */
-                            text-align: center;
-                            font-size: 0.875rem; /* Text size */
-                            font-weight: bold;
-                            cursor: pointer;
-                        }
-
-                        /* Dynamic styling based on status */
-                        .active {
-                            background-color: #4caf50;
-                            color: white;
-                        }
-
-                        .inactive {
-                            background-color: #f44336;
-                            color: white;
-                        }
-                    </style>
-
+                    <h3 class="text-lg font-medium mb-2">Rack <?php echo e($vault); ?></h3>
                     <div class="slots">
                         <?php
                             $columns = array_chunk($vaultSlots->toArray(), 6); // Divide slots into columns of 6
