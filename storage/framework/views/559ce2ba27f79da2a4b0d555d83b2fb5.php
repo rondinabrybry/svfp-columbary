@@ -45,7 +45,7 @@
                     </button>
 
                     <!-- Collapsible Floor Content -->
-                    <div id="floor-<?php echo e($floor); ?>" class="hidden mt-2">
+                    <div id="floor-<?php echo e($floor); ?>" class="hidden mt-2"> 
                         <?php $__currentLoopData = $vaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="mb-4">
                                 <!-- Collapsible Vault Header -->
