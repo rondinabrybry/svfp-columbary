@@ -35,7 +35,7 @@
                     <button 
                         class="w-full flex justify-between items-center bg-green-500 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
                         onclick="toggleCollapse('vault-{{ $floor }}-{{ $vault }}')">
-                        <span>Vault {{ $vault }}</span>
+                        <span>Rack {{ $vault }}</span>
                         <span>&#9660;</span>
                     </button>
 
@@ -43,7 +43,7 @@
                         <div class="overflow-x-auto">
                             <table class="table-auto w-full border-collapse border border-gray-300">
                                 <thead>
-                                    <tr class="bg-gray-300 dark:bg-gray-100">
+                                    <tr class="bg-gray-300 dark:bg-gray-700">
                                         <th class="border border-gray-300 px-4 py-2 text-center">Slot Number</th>
                                         <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
                                         <th class="border border-gray-300 px-4 py-2 text-left">Price</th>

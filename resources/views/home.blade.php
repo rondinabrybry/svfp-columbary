@@ -18,7 +18,7 @@
                 <div class="vaults flex flex-wrap gap-6">
                     @foreach ($floorVaults as $vault => $vaultSlots)
                         <div class="vault border rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-2 text-center">Vault {{ $vault }}</h3>
+                            <h3 class="text-lg font-medium mb-2 text-center">Rack {{ $vault }}</h3>
                             <div class="slots grid grid-rows-6 gap-2">
                                 @foreach ($vaultSlots as $slot)
                                     <div 

@@ -28,7 +28,7 @@
 
             <!-- Floors Section -->
             @foreach ($slots as $floor => $vaults)
-                <div class="mb-6">
+            <div class="mb-6 text-black dark:text-white">
                     <!-- Collapsible Floor Header -->
                     <button
                         class="w-full flex justify-between items-center bg-blue-500 text-white px-4 py-3 rounded-lg shadow focus:outline-none"
@@ -43,37 +43,36 @@
                             <div class="mb-4">
                                 <!-- Collapsible Vault Header -->
                                 <button
-                                    class="w-full flex justify-between items-center bg-green-400 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
+                                    class="w-full flex justify-between items-center bg-green-500 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
                                     onclick="toggleCollapse('floor-{{ $floor }}-vault-{{ $vault }}')">
-                                    <span>Vault {{ $vault }}</span>
+                                    <span>Rack {{ $vault }}</span>
                                     <span>&#9660;</span>
                                 </button>
 
                                 <!-- Collapsible Vault Content -->
                                 <div id="floor-{{ $floor }}-vault-{{ $vault }}" class="hidden mt-2">
                                     <div class="overflow-x-auto">
-                                        <table class="w-full border-collapse border border-gray-300">
-                                            <thead class="bg-gray-100">
-                                                <tr>
-                                                    <th class="border border-gray-300 px-4 py-2">Slot Number</th>
-                                                    <th class="border border-gray-300 px-4 py-2">Status</th>
-                                                    <th class="border border-gray-300 px-4 py-2">Price</th>
-                                                    <th class="border border-gray-300 px-4 py-2">Buyer Name</th>
-                                                    <th class="border border-gray-300 px-4 py-2">Payment Status</th>
-                                                    <th class="border border-gray-300 px-4 py-2">Actions</th>
+                                        <table class="table-auto w-full border-collapse border border-gray-300">
+                                            <thead>
+                                                <tr class="bg-gray-300 dark:bg-gray-700">
+                                                    <th class="border border-gray-300 px-4 py-2 text-center">Slot Number</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Buyer Name</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Payment Status</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($vaultSlots as $slot)
-                                                    <tr
-                                                        class="{{ $slot->status === 'Available' ? 'bg-green-50' : ($slot->status === 'Reserved' ? 'bg-yellow-50' : 'bg-red-50') }}">
+                                                <tr class="text-black dark:text-white hover:bg-gray-400">
                                                         <td class="border border-gray-300 px-4 py-2 text-center">
                                                             {{ $slot->slot_number }}
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
                                                             <span
                                                                 class="px-2 py-1 rounded-full text-white 
-                {{ $slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : ($slot->status === 'Sold' ? 'bg-[#FFD700]' : 'bg-red-500')) }}">
+                                                                    {{ $slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : ($slot->status === 'Sold' ? 'bg-[#FFD700]' : 'bg-red-500')) }}">
                                                                 {{ $slot->status }}
                                                             </span>
                                                         </td>

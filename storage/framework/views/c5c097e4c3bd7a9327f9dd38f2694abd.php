@@ -28,7 +28,7 @@
                 <div class="vaults flex flex-wrap gap-6">
                     <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="vault border rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-2 text-center">Vault <?php echo e($vault); ?></h3>
+                            <h3 class="text-lg font-medium mb-2 text-center">Rack <?php echo e($vault); ?></h3>
                             <div class="slots grid grid-rows-6 gap-2">
                                 <?php $__currentLoopData = $vaultSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div 
