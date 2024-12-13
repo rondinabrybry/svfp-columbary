@@ -47,4 +47,5 @@ class HomeController extends Controller
 
         return response()->json(['message' => 'Slot reserved successfully!']);
     }
+    
 }

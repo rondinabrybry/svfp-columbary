@@ -23,28 +23,75 @@
             <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">Sold</p>
         </div>
         <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="floor mb-8">
-                <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
-                <div class="vaults flex flex-wrap gap-6">
-                    <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="vault border rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-2 text-center">Rack <?php echo e($vault); ?></h3>
-                            <div class="slots grid grid-rows-6 gap-2">
-                                <?php $__currentLoopData = $vaultSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <div 
-                                        class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer <?php echo e(strtolower(str_replace(' ', '-', $slot->status))); ?>"
-                                        data-slot-id="<?php echo e($slot->id); ?>"
-                                        data-slot-number="<?php echo e($slot->slot_number); ?>">
-                                        <?php echo e($slot->slot_number); ?>
+    <div class="floor mb-8">
+        <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
+        <div class="vaults flex flex-wrap gap-6">
+            <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="vault border rounded-lg p-4">
+                    <h3 class="text-lg font-medium mb-2 text-center">Rack <?php echo e($vault); ?></h3>
+                    
+                    <style>
+                        .slots {
+                            display: flex;
+                            flex-direction: row; /* Align columns horizontally */
+                            gap: 1rem; /* Gap between columns */
+                        }
+
+                        .column {
+                            display: flex;
+                            flex-direction: column; /* Align slots vertically */
+                            gap: 0.5rem; /* Gap between slots */
+                        }
+
+                        .slot {
+                            display: flex; /* Flexbox for centering content */
+                            align-items: center;
+                            justify-content: center;
+                            width: 3rem; /* Fixed width */
+                            height: 3rem; /* Fixed height */
+                            border: 1px solid #000; /* Example border for visibility */
+                            text-align: center;
+                            font-size: 0.875rem; /* Text size */
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+
+                        /* Dynamic styling based on status */
+                        .active {
+                            background-color: #4caf50;
+                            color: white;
+                        }
+
+                        .inactive {
+                            background-color: #f44336;
+                            color: white;
+                        }
+                    </style>
+
+                    <div class="slots">
+                        <?php
+                            $columns = array_chunk($vaultSlots->toArray(), 6); // Divide slots into columns of 6
+                        ?>
+
+                        <?php $__currentLoopData = $columns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $column): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="column">
+                                <?php $__currentLoopData = $column; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="slot <?php echo e(strtolower(str_replace(' ', '-', $slot['status']))); ?>"
+                                        data-slot-id="<?php echo e($slot['id']); ?>"
+                                        data-slot-number="<?php echo e($slot['slot_number']); ?>">
+                                        <?php echo e($slot['slot_number']); ?>
 
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
-                        </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+    </div>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
     </div>
 
     <!-- Modal (remains the same as in the previous version) -->

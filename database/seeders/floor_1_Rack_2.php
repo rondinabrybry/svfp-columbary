@@ -5,24 +5,24 @@ namespace Database\Seeders;
 use App\Models\ColumbarySlot;
 use Illuminate\Database\Seeder;
 
-class ColumbarySlotSeeder extends Seeder
+class floor_1_Rack_2 extends Seeder
 {
     public function run()
     {
-        $floors = 3; // Number of floors
-        $vaultsPerFloor = 5; // Number of vaults per floor
-        $slotsPerVault = 6; // Number of slots per vault
+        $floors = 1; // Number of floors
+        $rackPerFloor = 2; // Number of racks per floor
+        $rowsPerRack = 50; // Number of rows per rack (increased from 6)
 
         $slotNumber = 1;
 
         for ($floor = 1; $floor <= $floors; $floor++) {
-            for ($vault = 1; $vault <= $vaultsPerFloor; $vault++) {
-                for ($slot = 1; $slot <= $slotsPerVault; $slot++) {
-                    // Determine the price based on the slot level
-                    if ($slot === 3 || $slot === 4) {
-                        $price = 20000; // Price for middle slots
+            for ($vault = 1; $vault <= $rackPerFloor; $vault++) {
+                for ($row = 1; $row <= $rowsPerRack; $row++) {
+                    // Determine the price based on the row level
+                    if ($row === 7 || $row === 8) {
+                        $price = 20000; // Price for middle rows
                     } else {
-                        $price = 10000; // Price for other slots
+                        $price = 10000; // Price for other rows
                     }
 
                     ColumbarySlot::create([

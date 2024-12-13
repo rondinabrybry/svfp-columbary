@@ -13,27 +13,74 @@
             <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">Sold</p>
         </div>
         @foreach ($slots as $floor => $floorVaults)
-            <div class="floor mb-8">
-                <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor {{ $floor }}</h2>
-                <div class="vaults flex flex-wrap gap-6">
-                    @foreach ($floorVaults as $vault => $vaultSlots)
-                        <div class="vault border rounded-lg p-4">
-                            <h3 class="text-lg font-medium mb-2 text-center">Rack {{ $vault }}</h3>
-                            <div class="slots grid grid-rows-6 gap-2">
-                                @foreach ($vaultSlots as $slot)
-                                    <div 
-                                        class="slot w-12 h-12 flex items-center justify-center border text-sm font-bold cursor-pointer {{ strtolower(str_replace(' ', '-', $slot->status)) }}"
-                                        data-slot-id="{{ $slot->id }}"
-                                        data-slot-number="{{ $slot->slot_number }}">
-                                        {{ $slot->slot_number }}
+    <div class="floor mb-8">
+        <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor {{ $floor }}</h2>
+        <div class="vaults flex flex-wrap gap-6">
+            @foreach ($floorVaults as $vault => $vaultSlots)
+                <div class="vault border rounded-lg p-4">
+                    <h3 class="text-lg font-medium mb-2 text-center">Rack {{ $vault }}</h3>
+                    
+                    <style>
+                        .slots {
+                            display: flex;
+                            flex-direction: row; /* Align columns horizontally */
+                            gap: 1rem; /* Gap between columns */
+                        }
+
+                        .column {
+                            display: flex;
+                            flex-direction: column; /* Align slots vertically */
+                            gap: 0.5rem; /* Gap between slots */
+                        }
+
+                        .slot {
+                            display: flex; /* Flexbox for centering content */
+                            align-items: center;
+                            justify-content: center;
+                            width: 3rem; /* Fixed width */
+                            height: 3rem; /* Fixed height */
+                            border: 1px solid #000; /* Example border for visibility */
+                            text-align: center;
+                            font-size: 0.875rem; /* Text size */
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+
+                        /* Dynamic styling based on status */
+                        .active {
+                            background-color: #4caf50;
+                            color: white;
+                        }
+
+                        .inactive {
+                            background-color: #f44336;
+                            color: white;
+                        }
+                    </style>
+
+                    <div class="slots">
+                        @php
+                            $columns = array_chunk($vaultSlots->toArray(), 6); // Divide slots into columns of 6
+                        @endphp
+
+                        @foreach ($columns as $column)
+                            <div class="column">
+                                @foreach ($column as $slot)
+                                    <div class="slot {{ strtolower(str_replace(' ', '-', $slot['status'])) }}"
+                                        data-slot-id="{{ $slot['id'] }}"
+                                        data-slot-number="{{ $slot['slot_number'] }}">
+                                        {{ $slot['slot_number'] }}
                                     </div>
                                 @endforeach
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
+    </div>
+@endforeach
+
     </div>
 
     <!-- Modal (remains the same as in the previous version) -->
