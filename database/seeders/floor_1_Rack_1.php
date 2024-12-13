@@ -11,12 +11,12 @@ class floor_1_Rack_1 extends Seeder
     {
         // Rack specifications
         $rackSpecs = [
-            1 => 16, // Rack 1: 16 slots
-            2 => 12, // Rack 2: 12 slots
-            3 => 60, // Rack 3: 60 slots
-            4 => 32, // Rack 4: 32 slots
-            5 => 24, // Rack 5: 24 slots
-            6 => 60  // Rack 6: 60 slots
+            1 => 96, // Rack 1: 16 slots
+            2 => 72, // Rack 2: 12 slots
+            3 => 360, // Rack 3: 60 slots
+            4 => 192, // Rack 4: 32 slots
+            5 => 144, // Rack 5: 24 slots
+            6 => 360  // Rack 6: 60 slots
         ];
 
         $slotNumber = 1;
