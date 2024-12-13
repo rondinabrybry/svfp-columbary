@@ -44,7 +44,13 @@ class DashboardController extends Controller
             ->get();
 
         // Payment Statistics
+        // Count all payments
         $totalPayments = Payment::count();
+
+        // Count only the 'paid' payments
+        $paidPayments = Payment::where('payment_status', 'paid')->count();
+
+        // Get the distribution of payment statuses
         $paymentStatusDistribution = Payment::select('payment_status', DB::raw('COUNT(*) as count'))
             ->groupBy('payment_status')
             ->pluck('count', 'payment_status');
@@ -59,6 +65,7 @@ class DashboardController extends Controller
         $totalValueOfSoldSlots = ColumbarySlot::where('status', 'Sold')
             ->sum('price');
 
+        // Return to the view
         return view('dashboard', [
             'totalSlots' => $totalSlots,
             'availableSlots' => $availableSlots,
@@ -68,9 +75,10 @@ class DashboardController extends Controller
             'slotsByFloor' => $floorSummary,
             'slotsByFloorAndVault' => $slotsByFloorAndVault,
             'totalPayments' => $totalPayments,
+            'paidPayments' => $paidPayments,  // Added paid payments count
             'paymentStatusDistribution' => $paymentStatusDistribution,
             'recentPayments' => $recentPayments,
             'totalValueOfSoldSlots' => $totalValueOfSoldSlots
         ]);
-    }
-}
+            }
+        }

@@ -34,7 +34,7 @@
                 <div class="bg-white text-black dark:text-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-4">Financial Summary</h3>
                     <div class="space-y-2">
-                        <p>Total Payments: <span class="font-bold"><?php echo e($totalPayments); ?></span></p>
+                        <p>Total Payments: <span class="font-bold"><?php echo e($paidPayments); ?></span></p>
                         <p>Total Value of Sold Slots: <span class="font-bold text-green-600">₱<?php echo e(number_format($totalValueOfSoldSlots, 2)); ?></span></p>
                     </div>
                 </div>
