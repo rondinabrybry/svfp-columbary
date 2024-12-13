@@ -38,7 +38,7 @@
                     </button>
 
                     <!-- Collapsible Floor Content -->
-                    <div id="floor-{{ $floor }}" class="hidden mt-2">
+                    <div id="floor-{{ $floor }}" class="hidden mt-2"> 
                         @foreach ($vaults as $vault => $vaultSlots)
                             <div class="mb-4">
                                 <!-- Collapsible Vault Header -->
