@@ -14,7 +14,29 @@
 
         </h2>
      <?php $__env->endSlot(); ?>
+    <style>
+    /* Loading spinner styles */
+    .loading-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+    }
 
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+<div id="loadingSpinner" class="loading-spinner"></div>
+
+<div id="slotsContainer" style="display: none;">
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 text-white">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -160,6 +182,22 @@
             </div>
         </div>
     </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Hide the loading spinner and show the slots container once the page is loaded
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const slotsContainer = document.getElementById('slotsContainer');
+
+        // Hide the loading spinner and show the slots container after 2 seconds (simulating loading)
+        setTimeout(function () {
+            loadingSpinner.style.display = 'none';
+            slotsContainer.style.display = 'block';
+        }, 1000); // Simulating a 1-second load delay. Adjust as needed.
+
+        // You can use AJAX to dynamically load the slots data, or simply rely on the initial load.
+    });
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
