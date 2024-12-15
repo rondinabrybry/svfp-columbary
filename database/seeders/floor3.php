@@ -5,22 +5,33 @@ namespace Database\Seeders;
 use App\Models\ColumbarySlot;
 use Illuminate\Database\Seeder;
 
-class floor_1_Rack_1 extends Seeder
+class floor3 extends Seeder
 {
     public function run()
     {
         // Rack specifications
         $rackSpecs = [
-            1 => 96, // Rack 1: 16 slots
-            2 => 72, // Rack 2: 12 slots
-            3 => 360, // Rack 3: 60 slots
-            4 => 192, // Rack 4: 32 slots
-            5 => 144, // Rack 5: 24 slots
-            6 => 360  // Rack 6: 60 slots
+            1 => 84,
+            2 => 144,
+            3 => 168,
+            4 => 360,
+            5 => 336,
+            6 => 360,
+            7 => 168,
+            8 => 168,
+            9 => 360,
+            10 => 336,
+            11 => 360,
+            12 => 168,
+            13 => 84,
+            14 => 168,
+            15 => 84
         ];
 
-        $slotNumber = 1;
-        $floor = 1;
+        // Get the last used slot number to continue from it
+        $lastSlotNumber = ColumbarySlot::max('slot_number') ?: 0;
+        $slotNumber = $lastSlotNumber + 1; // Start from the next available slot number
+        $floor = 3;
 
         foreach ($rackSpecs as $vaultNumber => $totalSlots) {
             $slotCountInRow = 0; // Track slots per row
@@ -29,10 +40,12 @@ class floor_1_Rack_1 extends Seeder
                 $slotCountInRow++;
 
                 // Determine the price based on the slot position in the row
-                if ($slotCountInRow === 3 || $slotCountInRow === 4) {
-                    $price = 20000; // Price for 3rd and 4th slots in a row
+                if ($slotCountInRow === 5 || $slotCountInRow === 6) {
+                    $price = 40000;
+                } elseif ($slotCountInRow === 2 || $slotCountInRow === 3 || $slotCountInRow === 4) {
+                    $price = 60000;
                 } else {
-                    $price = 10000; // Price for other slots
+                    $price = 50000;
                 }
 
                 // Reset slot count after every 6 slots (1 row)
@@ -40,6 +53,7 @@ class floor_1_Rack_1 extends Seeder
                     $slotCountInRow = 0;
                 }
 
+                // Create the ColumbarySlot entry
                 ColumbarySlot::create([
                     'slot_number' => $slotNumber++,
                     'floor_number' => $floor,

@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\ColumbarySlot;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function showSlots()
     {
-        // Group slots by floor and vault
+        // Fetch the slots and process them
         $slots = ColumbarySlot::all()
             ->groupBy('floor_number')
             ->map(function ($floorSlots) {
@@ -19,9 +20,35 @@ class HomeController extends Controller
                         return $vaultSlots->sortBy('slot_number');
                     });
             });
-
+    
         return view('home', compact('slots'));
     }
+    
+
+    public function getSlotDetails($slotId)
+    {
+        $slot = ColumbarySlot::with('payment')->findOrFail($slotId);
+        
+        // Check if the slot is reserved or sold
+        if ($slot->status === 'Reserved' || $slot->status === 'Sold') {
+            $payment = $slot->payment;
+            
+            return response()->json([
+                'slotNumber' => $slot->slot_number,
+                'floor' => $slot->floor_number,
+                'vault' => $slot->vault_number,
+                'status' => $slot->status,
+                'buyerName' => $payment->buyer_name ?? null,
+                'contactInfo' => $payment->contact_info ?? null,
+                'paymentStatus' => $payment->payment_status ?? null,
+                // Format the payment date as 'M d, Y h:i A' (e.g., 'Dec 14, 2024 7:16 PM')
+                'paymentDate' => $payment->created_at ? $payment->created_at->format('M d, Y h:i A') : 'N/A'
+            ]);
+        }
+        
+        return response()->json(['message' => 'No details available'], 404);
+    }
+    
 
     public function reserveSlot(Request $request)
     {
@@ -47,5 +74,4 @@ class HomeController extends Controller
 
         return response()->json(['message' => 'Slot reserved successfully!']);
     }
-    
 }

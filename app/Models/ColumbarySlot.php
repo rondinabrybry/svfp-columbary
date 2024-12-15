@@ -13,8 +13,7 @@ class ColumbarySlot extends Model
 
     public function payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class, 'columbary_slot_id');
     }
-
 
 }
