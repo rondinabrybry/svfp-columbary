@@ -12,7 +12,7 @@ class ColumbaryController extends Controller
     public function index()
     {
         // Retrieve all unique floor numbers
-        $slots = ColumbarySlot::with('payment')
+        $floors = ColumbarySlot::with('payment')
             ->orderBy('floor_number')
             ->orderBy('vault_number')
             ->orderByRaw('CAST(slot_number AS UNSIGNED)')
