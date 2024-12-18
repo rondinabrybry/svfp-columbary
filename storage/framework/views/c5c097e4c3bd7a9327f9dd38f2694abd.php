@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
                     <div class="mb-4">
-<p><?php echo e($manilaTime); ?></p>
+                    <p><?php echo e($manilaTime); ?></p>
                         <!-- Buyer Name Input -->
                         <label for="buyerName" class="block text-sm font-medium mb-1">Your Name</label>
                         <input type="text" class="form-input w-full rounded border-gray-300" id="buyerName" name="buyer_name" required>

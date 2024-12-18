@@ -11,19 +11,18 @@ class HomeController extends Controller
 {
     public function showSlots()
     {
-        // Fetch the slots and process them
-        $slots = ColumbarySlot::all()
+        $slots = ColumbarySlot::select(['id', 'floor_number', 'vault_number', 'slot_number', 'status'])
+            ->orderBy('floor_number')
+            ->orderBy('vault_number')
+            ->orderBy('slot_number')
+            ->get()
             ->groupBy('floor_number')
             ->map(function ($floorSlots) {
-                return $floorSlots->groupBy('vault_number')
-                    ->map(function ($vaultSlots) {
-                        return $vaultSlots->sortBy('slot_number');
-                    });
+                return $floorSlots->groupBy('vault_number');
             });
     
         return view('home', compact('slots'));
     }
-    
 
     public function getSlotDetails($slotId)
     {
