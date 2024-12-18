@@ -11,14 +11,15 @@ class ColumbaryController extends Controller
 {
     public function index()
     {
-        // Retrieve all unique floor numbers
-        $floors = ColumbarySlot::with('payment')
-            ->orderBy('floor_number')
+        // Retrieve all slots and group them while also getting distinct floors
+        $slots = ColumbarySlot::orderBy('floor_number')
             ->orderBy('vault_number')
             ->orderByRaw('CAST(slot_number AS UNSIGNED)')
             ->get()
             ->groupBy(['floor_number', 'vault_number']);
-
+        
+        // Extract unique floor numbers from the grouped slots
+        $floors = $slots->keys();
     
         return view('columbary.index', compact('floors', 'slots'));
     }
