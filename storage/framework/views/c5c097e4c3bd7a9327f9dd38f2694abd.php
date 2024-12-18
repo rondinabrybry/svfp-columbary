@@ -86,12 +86,13 @@
                     <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
                     <div class="flex flex-row gap-6">
                         <?php for($i = 1; $i <= count($floorVaults); $i++): ?>
-                            <p id="floor-<?php echo e($floor); ?>-rack-<?php echo e($i); ?>"
-                                class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
-                                <?php echo e($i); ?>
+                        <p id="floor-<?php echo e($floor); ?>-rack-<?php echo e($i); ?>"
+                            class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
+                            <?php echo e(chr(64 + $i)); ?>
 
-                            </p>
-                        <?php endfor; ?>
+                        </p>
+                    <?php endfor; ?>
+                    
                     </div>
 
                     <div class="vaults flex flex-wrap gap-6">

@@ -33,123 +33,136 @@
 
             <!-- Floors Section -->
             <?php $__currentLoopData = $floors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-    <div class="mb-6 text-black dark:text-white">
-        <button 
-            class="w-full flex justify-between items-center bg-blue-500 text-white px-4 py-3 rounded-lg shadow focus:outline-none"
-            onclick="toggleCollapse('floor-<?php echo e($floor); ?>')">
-            <span>Floor <?php echo e($floor); ?></span>
-            <span>&#9660;</span>
-        </button>
-
-        <div id="floor-<?php echo e($floor); ?>" class="hidden mt-2">
-            <?php $__currentLoopData = $slots[$floor]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="mb-4">
-                    <button 
-                        class="w-full flex justify-between items-center bg-green-500 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
-                        onclick="toggleCollapse('vault-<?php echo e($floor); ?>-<?php echo e($vault); ?>')">
-                        <span>Rack <?php echo e($vault); ?></span>
+                <div class="mb-6 text-black dark:text-white">
+                    <button
+                        class="w-full flex justify-between items-center bg-blue-500 text-white px-4 py-3 rounded-lg shadow focus:outline-none"
+                        onclick="toggleCollapse('floor-<?php echo e($floor); ?>')">
+                        <span>Floor <?php echo e($floor); ?></span>
                         <span>&#9660;</span>
                     </button>
 
-                    <div id="vault-<?php echo e($floor); ?>-<?php echo e($vault); ?>" class="hidden mt-2">
-                        <div class="overflow-x-auto">
-                            <table class="table-auto w-full border-collapse border border-gray-300">
-                                <thead>
-                                    <tr class="bg-gray-300 dark:bg-gray-700">
-                                        <th class="border border-gray-300 px-4 py-2 text-center">Slot Number</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">Buyer Name</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">Payment Status</th>
-                                        <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php $__currentLoopData = $vaultSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <tr class="text-black dark:text-white hover:bg-gray-400">
-                                            <td class="border border-gray-300 px-4 py-2 text-center"><?php echo e($slot->slot_number); ?></td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <?php if($slot): ?>
-                                                    <span class="px-2 py-1 rounded-full text-white 
+                    <div id="floor-<?php echo e($floor); ?>" class="hidden mt-2">
+                        <?php $__currentLoopData = $slots[$floor]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="mb-4">
+                                <button
+                                    class="w-full flex justify-between items-center bg-green-500 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
+                                    onclick="toggleCollapse('vault-<?php echo e($floor); ?>-<?php echo e($vault); ?>')">
+                                    <span>Rack <?php echo e(chr(64 + $vault)); ?></span>
+                                    <span>&#9660;</span>
+                                </button>
+
+                                <div id="vault-<?php echo e($floor); ?>-<?php echo e($vault); ?>" class="hidden mt-2">
+                                    
+                                    <div class="overflow-x-auto">
+                                        <table class="table-auto w-full border-collapse border border-gray-300">
+                                            <thead>
+                                                <tr class="bg-gray-300 dark:bg-gray-700">
+                                                    <th class="border border-gray-300 px-4 py-2 text-center">Slot Number
+                                                    </th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Buyer Name
+                                                    </th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Payment
+                                                        Status</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $__currentLoopData = $vaultSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <tr class="text-black dark:text-white hover:bg-gray-400">
+                                                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                                            <?php echo e($slot->slot_number); ?></td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php if($slot): ?>
+                                                                <span
+                                                                    class="px-2 py-1 rounded-full text-white 
                                                         <?php echo e($slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500')); ?>">
-                                                        <?php echo e($slot->status); ?>
+                                                                    <?php echo e($slot->status); ?>
 
-                                                    </span>
-                                                <?php else: ?>
-                                                    <span class="px-2 py-1 rounded-full text-white bg-gray-500">
-                                                        Not Created
-                                                    </span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <?php if($slot): ?>
-                                                    ₱<?php echo e(number_format($slot->price, 2)); ?>
+                                                                </span>
+                                                            <?php else: ?>
+                                                                <span
+                                                                    class="px-2 py-1 rounded-full text-white bg-gray-500">
+                                                                    Not Created
+                                                                </span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php if($slot): ?>
+                                                                ₱<?php echo e(number_format($slot->price, 2)); ?>
 
-                                                <?php else: ?>
-                                                    N/A
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <?php if($slot && $slot->payment): ?>
-                                                    <?php echo e($slot->payment->buyer_name); ?>
+                                                            <?php else: ?>
+                                                                N/A
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php if($slot && $slot->payment): ?>
+                                                                <?php echo e($slot->payment->buyer_name); ?>
 
-                                                <?php else: ?>
-                                                    N/A
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <?php if($slot && $slot->payment): ?>
-                                                    <?php echo e($slot->payment->payment_status); ?>
+                                                            <?php else: ?>
+                                                                N/A
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php if($slot && $slot->payment): ?>
+                                                                <?php echo e($slot->payment->payment_status); ?>
 
-                                                <?php else: ?>
-                                                    N/A
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                <?php if($slot && $slot->status === 'Available'): ?>
-                                                    <!-- Reservation Form -->
-                                                    <form action="<?php echo e(route('columbary.reserve', $slot->id)); ?>" method="POST" class="flex items-center gap-2">
-                                                        <?php echo csrf_field(); ?>
-                                                        <input type="text" name="buyer_name" placeholder="Buyer Name" required
-                                                            class="text-black border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring focus:border-blue-500">
-                                                        <input type="number" name="contact_info" placeholder="Contact Info" required
-                                                            class="text-black border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring focus:border-blue-500">
-                                                        <button type="submit"
-                                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
-                                                            Reserve
-                                                        </button>
-                                                    </form>
-                                                <?php elseif($slot && $slot->status === 'Reserved'): ?>
-                                                    <!-- View Client Info Button -->
-                                                    <button onclick="openModal(<?php echo e($slot->id); ?>)"
-                                                        class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
-                                                        View
-                                                    </button>
+                                                            <?php else: ?>
+                                                                N/A
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php if($slot && $slot->status === 'Available'): ?>
+                                                                <!-- Reservation Form -->
+                                                                <form
+                                                                    action="<?php echo e(route('columbary.reserve', $slot->id)); ?>"
+                                                                    method="POST" class="flex items-center gap-2">
+                                                                    <?php echo csrf_field(); ?>
+                                                                    <input type="text" name="buyer_name"
+                                                                        placeholder="Buyer Name" required
+                                                                        class="text-black border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring focus:border-blue-500">
+                                                                    <input type="number" name="contact_info"
+                                                                        placeholder="Contact Info" required
+                                                                        class="text-black border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring focus:border-blue-500">
+                                                                    <button type="submit"
+                                                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                                                                        Reserve
+                                                                    </button>
+                                                                </form>
+                                                            <?php elseif($slot && $slot->status === 'Reserved'): ?>
+                                                                <!-- View Client Info Button -->
+                                                                <button onclick="openModal(<?php echo e($slot->id); ?>)"
+                                                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+                                                                    View
+                                                                </button>
 
-                                                    <form action="<?php echo e(route('columbary.paid', $slot->payment->id)); ?>" method="POST" class="inline-block">
-                                                        <?php echo csrf_field(); ?>
-                                                        <button type="submit" 
-                                                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                                                                onclick="return confirm('Mark this slot as paid?')">
-                                                            Mark as Paid
-                                                        </button>
-                                                    </form>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                                                <form
+                                                                    action="<?php echo e(route('columbary.paid', $slot->payment->id)); ?>"
+                                                                    method="POST" class="inline-block">
+                                                                    <?php echo csrf_field(); ?>
+                                                                    <button type="submit"
+                                                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                                                                        onclick="return confirm('Mark this slot as paid?')">
+                                                                        Mark as Paid
+                                                                    </button>
+                                                                </form>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-    </div>
-<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         </div>
-    </div>  
+    </div>
 
     <!-- Modal remains the same -->
     <div id="client-info-modal"

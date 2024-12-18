@@ -76,11 +76,12 @@
                     <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor {{ $floor }}</h2>
                     <div class="flex flex-row gap-6">
                         @for ($i = 1; $i <= count($floorVaults); $i++)
-                            <p id="floor-{{ $floor }}-rack-{{ $i }}"
-                                class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
-                                {{ $i }}
-                            </p>
-                        @endfor
+                        <p id="floor-{{ $floor }}-rack-{{ $i }}"
+                            class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
+                            {{ chr(64 + $i) }}
+                        </p>
+                    @endfor
+                    
                     </div>
 
                     <div class="vaults flex flex-wrap gap-6">

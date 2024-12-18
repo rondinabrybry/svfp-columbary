@@ -8,22 +8,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ColumbaryController extends Controller
-{
-    public function index()
+
+{public function index()
     {
-        // Retrieve all slots and group them while also getting distinct floors
-        $slots = ColumbarySlot::orderBy('floor_number')
+        $slots = ColumbarySlot::select(['id', 'slot_number', 'floor_number', 'vault_number', 'status', 'price'])
+            ->with(['payment:id,columbary_slot_id,buyer_name,payment_status'])
+            ->orderBy('floor_number')
             ->orderBy('vault_number')
             ->orderByRaw('CAST(slot_number AS UNSIGNED)')
             ->get()
             ->groupBy(['floor_number', 'vault_number']);
-        
-        // Extract unique floor numbers from the grouped slots
+    
         $floors = $slots->keys();
     
         return view('columbary.index', compact('floors', 'slots'));
     }
-    
     
 
 
@@ -97,6 +96,22 @@ class ColumbaryController extends Controller
 
         return view('columbary.list-slots', compact('slots'));
     }
+
+    public function getVaults($floor)
+{
+    $vaults = ColumbarySlot::select(['id', 'slot_number', 'vault_number', 'status', 'price'])
+        ->where('floor_number', $floor)
+        ->with(['payment:id,columbary_slot_id,buyer_name,payment_status'])
+        ->orderBy('vault_number')
+        ->orderByRaw('CAST(slot_number AS UNSIGNED)')
+        ->get()
+        ->groupBy('vault_number');
+
+    $html = view('columbary.partials.vaults', compact('vaults'))->render();
+
+    return response()->json(['html' => $html]);
+}
+
 
     public function edit($id)
     {
