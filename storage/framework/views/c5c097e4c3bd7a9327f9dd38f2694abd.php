@@ -88,8 +88,7 @@
                         <?php for($i = 1; $i <= count($floorVaults); $i++): ?>
                         <p id="floor-<?php echo e($floor); ?>-rack-<?php echo e($i); ?>"
                             class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
-                            <?php echo e(chr(64 + $i)); ?>
-
+                            <?php echo e(chr(64 + $i)); ?> 
                         </p>
                     <?php endfor; ?>
                     

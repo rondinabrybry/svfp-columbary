@@ -45,7 +45,7 @@
                                 <button
                                     class="w-full flex justify-between items-center bg-green-500 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
                                     onclick="toggleCollapse('floor-{{ $floor }}-vault-{{ $vault }}')">
-                                    <span>Rack {{ $vault }}</span>
+                                    <span>Rack {{ chr(64 + $vault) }} </span>
                                     <span>&#9660;</span>
                                 </button>
 
@@ -91,6 +91,19 @@
                                                                     class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                                                                     Edit
                                                                 </a>
+
+                                                                @if ($slot->status === 'Reserved')
+                                                                <form action="{{ route('columbary.makeAvailable', $slot->id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <button
+                                                                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                                                                        type="submit">
+                                                                        Remove Reserved
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                            
 
                                                                 @if (($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold')
                                                                 <form action="{{ route('columbary.markNotAvailable', $slot->id) }}" method="POST" class="inline-block">

@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/columbary/edit/{id}', [ColumbaryController::class, 'edit'])->name('columbary.edit');
     Route::get('/columbary/floor/{floor}', [ColumbaryController::class, 'getVaults'])->name('columbary.getVaults');
     Route::put('/columbary/update/{id}', [ColumbaryController::class, 'update'])->name('columbary.update');
+    Route::put('/columbary/{id}/make-available', [ColumbaryController::class, 'makeAvailable'])->name('columbary.makeAvailable');
+
 
     Route::get('/slot-details/{slotId}', [HomeController::class, 'getSlotDetails'])->name('slot.details');
 

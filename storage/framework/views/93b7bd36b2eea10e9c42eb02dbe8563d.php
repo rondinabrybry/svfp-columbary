@@ -49,7 +49,7 @@
                                     onclick="toggleCollapse('vault-<?php echo e($floor); ?>-<?php echo e($vault); ?>')">
                                     <span>Rack <?php echo e(chr(64 + $vault)); ?></span>
                                     <span>&#9660;</span>
-                                </button>
+                                </button> 
 
                                 <div id="vault-<?php echo e($floor); ?>-<?php echo e($vault); ?>" class="hidden mt-2">
                                     

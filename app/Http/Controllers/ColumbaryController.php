@@ -118,7 +118,28 @@ class ColumbaryController extends Controller
         $slot = ColumbarySlot::with('payment')->findOrFail($id);
         return view('columbary.edit-slot', compact('slot'));
     }
-
+    public function makeAvailable($id)
+    {
+        $slot = ColumbarySlot::findOrFail($id);
+    
+        DB::beginTransaction();
+        try {
+            // Update the slot status to Available
+            $slot->update(['status' => 'Available']);
+    
+            // Delete associated payment if it exists
+            if ($slot->payment) {
+                $slot->payment->delete();
+            }
+    
+            DB::commit();
+            return redirect()->route('columbary.list')->with('success', 'Slot is now available.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to remove reservation: ' . $e->getMessage());
+        }
+    }
+    
     public function update(Request $request, $id)
     {
         $slot = ColumbarySlot::findOrFail($id);
