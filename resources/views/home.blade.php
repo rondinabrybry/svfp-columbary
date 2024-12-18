@@ -78,7 +78,7 @@
                         @for ($i = 1; $i <= count($floorVaults); $i++)
                         <p id="floor-{{ $floor }}-rack-{{ $i }}"
                             class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
-                            {{ chr(64 + $i) }}
+                            {{ chr(64 + $i) }} 
                         </p>
                     @endfor
                     
