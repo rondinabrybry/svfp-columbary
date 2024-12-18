@@ -180,6 +180,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Close</button>
             </div>
             <div class="modal-body mt-4">
+                <?php
+                $manilaTime = \Carbon\Carbon::now('Asia/Manila')->format('M d, Y h:i A');
+            ?>
+            
+            
                 <!-- Content will be injected dynamically here -->
             </div>
         </div>
@@ -234,13 +239,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 <form id="reservationForm">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="slot_id" id="slotId" value="${slotId}">
-                    <div class="mb-4">
-                        <?php echo e(date('M d, Y h:i A')); ?>
 
+
+                    <div class="mb-4">
+<p><?php echo e($manilaTime); ?></p>
+                        <!-- Buyer Name Input -->
                         <label for="buyerName" class="block text-sm font-medium mb-1">Your Name</label>
-                        <input type="text" class="form-input w-full rounded border-gray-300" id="buyerName"
-                            name="buyer_name" required>
+                        <input type="text" class="form-input w-full rounded border-gray-300" id="buyerName" name="buyer_name" required>
                     </div>
+
                     <div class="mb-4">
                         <label for="contactInfo" class="block text-sm font-medium mb-1">Contact Number</label>
                         <input type="text" class="form-input w-full rounded border-gray-300" id="contactInfo"
