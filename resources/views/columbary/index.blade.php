@@ -37,7 +37,7 @@
                                     onclick="toggleCollapse('vault-{{ $floor }}-{{ $vault }}')">
                                     <span>Rack {{ chr(64 + $vault) }}</span>
                                     <span>&#9660;</span>
-                                </button>
+                                </button> 
 
                                 <div id="vault-{{ $floor }}-{{ $vault }}" class="hidden mt-2">
                                     
