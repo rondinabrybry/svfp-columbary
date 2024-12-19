@@ -40,7 +40,12 @@
                 </div>
             <?php endif; ?>
 
-            
+            <div class="mb-4">
+                <button onclick="openAddSlotsModal()" 
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Add Slots
+                </button>
+            </div>
 
             <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $vaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="mb-6 text-black dark:text-white">

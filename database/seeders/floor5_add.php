@@ -5,33 +5,23 @@ namespace Database\Seeders;
 use App\Models\ColumbarySlot;
 use Illuminate\Database\Seeder;
 
-class floor6 extends Seeder
+class floor5_add extends Seeder
 {
     public function run()
     {
         
+        $floor = 5;
+
+        
         $rackSpecs = [
-            1 => 84,
-            2 => 144,
-            3 => 168,
-            4 => 360,
-            5 => 336,
-            6 => 360,
-            7 => 168,
-            8 => 168,
-            9 => 360,
-            10 => 336,
-            11 => 360,
-            12 => 168,
-            13 => 84,
-            14 => 168,
-            15 => 84
+            1 => 10,
+            2 => 12,
+            
         ];
 
         
-        $lastSlotNumber = ColumbarySlot::max('slot_number') ?: 0;
-        $slotNumber = $lastSlotNumber + 1;
-        $floor = 6;
+        $maxSlotNumber = ColumbarySlot::where('floor_number', $floor)->max('slot_number');
+        $slotNumber = $maxSlotNumber ? $maxSlotNumber + 1 : 1;
 
         foreach ($rackSpecs as $vaultNumber => $totalSlots) {
             $slotCountInRow = 0;
@@ -39,7 +29,6 @@ class floor6 extends Seeder
             for ($i = 1; $i <= $totalSlots; $i++) {
                 $slotCountInRow++;
 
-                
                 if ($slotCountInRow === 5 || $slotCountInRow === 6) {
                     $price = 40000;
                 } elseif ($slotCountInRow === 2 || $slotCountInRow === 3 || $slotCountInRow === 4) {
@@ -53,8 +42,10 @@ class floor6 extends Seeder
                 }
 
                 
+                $formattedSlotNumber = str_pad($slotNumber++, 5, '0', STR_PAD_LEFT);
+
                 ColumbarySlot::create([
-                    'slot_number' => $slotNumber++,
+                    'slot_number' => $formattedSlotNumber,
                     'floor_number' => $floor,
                     'vault_number' => $vaultNumber,
                     'price' => $price,
@@ -62,7 +53,6 @@ class floor6 extends Seeder
                 ]);
             }
         }
-
         $totalSlots = array_sum($rackSpecs);
         echo "Total slots generated: {$totalSlots}\n";
     }
