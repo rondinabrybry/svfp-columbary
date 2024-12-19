@@ -14,6 +14,21 @@ class ColumbarySlotController extends Controller
             ->orderBy('floor_number')
             ->orderBy('vault_number')
             ->orderByRaw('CAST(slot_number AS UNSIGNED)')
+            ->paginate(10)
+            ->groupBy(['floor_number', 'vault_number']);
+
+        $floors = $slots->keys();
+
+        return view('columbary.index', compact('floors', 'slots'));
+    }
+
+    public function Loadindex()
+    {
+        $slots = ColumbarySlot::select(['id', 'slot_number', 'floor_number', 'vault_number', 'status', 'price'])
+            ->with(['payment:id,columbary_slot_id,buyer_name,payment_status'])
+            ->orderBy('floor_number')
+            ->orderBy('vault_number')
+            ->orderByRaw('CAST(slot_number AS UNSIGNED)')
             ->get()
             ->groupBy(['floor_number', 'vault_number']);
 
@@ -23,6 +38,18 @@ class ColumbarySlotController extends Controller
     }
 
     public function listSlots()
+    {
+        $slots = ColumbarySlot::with('payment')
+            ->orderBy('floor_number')
+            ->orderBy('vault_number')
+            ->orderByRaw('CAST(slot_number AS UNSIGNED)')
+            ->paginate(10)
+            ->groupBy(['floor_number', 'vault_number']);
+
+        return view('columbary.list-slots', compact('slots'));
+    }
+
+    public function loadAllSlots()
     {
         $slots = ColumbarySlot::with('payment')
             ->orderBy('floor_number')
@@ -61,7 +88,7 @@ class ColumbarySlotController extends Controller
             ]);
         }
 
-        return redirect()->route('columbary.list')->with('success', 'Slots added successfully');
+        return redirect()->back()->with('success', 'Slots added successfully');
     }
 
     public function update(Request $request, $id)
@@ -81,10 +108,10 @@ class ColumbarySlotController extends Controller
             $slot->update($validatedSlotData);
 
             DB::commit();
-            return redirect()->route('columbary.list')->with('success', 'Slot updated successfully');
+            return redirect()->route('columbary.loadAll')->with('success', 'Slot updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Failed to update slot: ' . $e->getMessage());
+            return view('columbary.loadAll')->with('error', 'Failed to update slot: ' . $e->getMessage());
         }
     }
 
@@ -92,7 +119,7 @@ class ColumbarySlotController extends Controller
     {
         $slot = ColumbarySlot::findOrFail($id);
         $slot->update(['status' => 'Available']);
-        return redirect()->route('columbary.list')->with('success', 'Slot is now available');
+        return redirect()->back()->with('success', 'Slot is now available');
     }
 
     public function markNotAvailable($id)
@@ -104,6 +131,6 @@ class ColumbarySlotController extends Controller
         }
 
         $slot->update(['status' => 'Not Available']);
-        return redirect()->route('columbary.list')->with('success', 'Slot marked as Not Available');
+        return redirect()->back()->with('success', 'Slot marked as Not Available');
     }
 }

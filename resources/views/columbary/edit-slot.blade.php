@@ -3,6 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Edit Columbary Slot') }}
         </h2>
+
     </x-slot>
     <div class="max-w-7xl container mx-auto p-6">
         <form action="{{ route('columbary.update', $slot->id) }}" method="POST"
@@ -109,7 +110,7 @@
                     Update Slot
                 </button>
                 
-                <a href="{{ route('columbary.list') }}"
+                <a href="{{ route('columbary.loadAll') }}"
                     class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                     Cancel
                 </a>

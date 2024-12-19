@@ -13,6 +13,7 @@
             <?php echo e(__('Edit Columbary Slot')); ?>
 
         </h2>
+
      <?php $__env->endSlot(); ?>
     <div class="max-w-7xl container mx-auto p-6">
         <form action="<?php echo e(route('columbary.update', $slot->id)); ?>" method="POST"
@@ -119,19 +120,7 @@
                     Update Slot
                 </button>
                 
-                <?php if($slot->status === 'Reserved'): ?>
-                    <form action="<?php echo e(route('columbary.makeAvailable', $slot->id)); ?>" method="POST" class="mt-4">
-                        <?php echo csrf_field(); ?>
-                        <?php echo method_field('PUT'); ?>
-                        <button
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit">
-                            Remove Reservation
-                        </button>
-                    </form>
-                <?php endif; ?>
-
-                <a href="<?php echo e(route('columbary.list')); ?>"
+                <a href="<?php echo e(route('columbary.loadAll')); ?>"
                     class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                     Cancel
                 </a>

@@ -18,11 +18,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('columbary.index')" :active="request()->routeIs('columbary.index')">
+                    <x-nav-link :href="route('columbary.index')" :active="request()->routeIs('columbary.index') || request()->routeIs('columbary.loadIndex')">
                         {{ __('Columbary') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('columbary.list')" :active="request()->routeIs('columbary.list')">
+                    <x-nav-link :href="route('columbary.list')" :active="request()->routeIs('columbary.list') || request()->routeIs('columbary.loadAll')">
                         {{ __('Manage Slots') }}
                     </x-nav-link>
                 </div>

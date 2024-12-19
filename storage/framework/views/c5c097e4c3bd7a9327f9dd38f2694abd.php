@@ -110,7 +110,7 @@
             }
         </style>
 
-        <!-- Loading Spinner -->
+
         <div id="loadingSpinner" class="loading-spinner"></div>
 
         <div id="slotsContainer" style="display: none;">
@@ -135,7 +135,7 @@
                                 <h3 class="text-lg font-medium mb-4"> Rack <?php echo e(chr(64 + $vault)); ?> </h3>
                                 <div class="slots" id="slots-<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
                                     <?php
-                                        $columns = array_chunk($vaultSlots->toArray(), 6); // Divide slots into columns of 6
+                                        $columns = array_chunk($vaultSlots->toArray(), 6);
                                     ?>
 
                                     <?php $__currentLoopData = $columns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $column): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -161,17 +161,15 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Hide the loading spinner and show the slots container once the page is loaded
+            
             const loadingSpinner = document.getElementById('loadingSpinner');
             const slotsContainer = document.getElementById('slotsContainer');
 
-            // Hide the loading spinner and show the slots container after 2 seconds (simulating loading)
             setTimeout(function () {
                 loadingSpinner.style.display = 'none';
                 slotsContainer.style.display = 'block';
-            }, 1000); // Simulating a 1-second load delay. Adjust as needed.
+            }, 1000);
 
-            // You can use AJAX to dynamically load the slots data, or simply rely on the initial load.
         });
     </script>
 
@@ -186,16 +184,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const rack = rackId[3];
             const slotContainer = document.getElementById('f' + floor + '-r' + rack);
 
-            // Check if this slot is already open
             const isOpen = !slotContainer.classList.contains('hidden');
 
-            // Close all open vaults first
             const openVaults = document.querySelectorAll('.vault:not(.hidden)');
             openVaults.forEach(function(vault) {
                 vault.classList.add('hidden');
             });
 
-            // If this slot was not already open, toggle it to open
             if (!isOpen) {
                 slotContainer.classList.remove('hidden');
             }
@@ -205,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     </script>
 
-    <!-- Modal remains the same as previous version -->
     <div id="reservationModal"
         class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -220,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
             ?>
             
             
-                <!-- Content will be injected dynamically here -->
             </div>
         </div>
     </div>
@@ -236,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const cancelModalButton = document.getElementById('cancelModal');
             const modalBody = modal.querySelector('.modal-body');
 
-            // Function to render the reservation form
             function renderReservationForm(slotId, slotNumber) {
                 const formHtml = `
                 <form id="reservationForm">
@@ -265,7 +257,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.querySelector('#reservationModalLabel').innerText = `Reserve Slot ${slotNumber}`;
                 modalBody.innerHTML = formHtml;
 
-                // Re-attach form submission event listener
                 const reservationForm = document.getElementById('reservationForm');
                 reservationForm.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -282,13 +273,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.json())
                         .then(data => {
                             alert(data.message);
-                            location.reload(); // Reload to update the slots
+                            location.reload();
                         })
                         .catch(error => console.error('Error:', error));
                 });
             }
 
-            // Function to render the slot details
             function renderSlotDetails(slotId) {
                 fetch(`/slot-details/${slotId}`)
                     .then(response => response.json())
@@ -313,7 +303,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                         modalBody.innerHTML += closeBtnHtml;
 
-                        // Re-attach the close button event
                         document.getElementById('cancelModal').addEventListener('click', () => {
                             modal.classList.add('hidden');
                         });
@@ -324,7 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
             }
 
-            // Open modal for available slots (Reserve Slot)
             availableSlots.forEach(slot => {
                 slot.addEventListener('click', function() {
                     const slotId = this.getAttribute('data-slot-id');
@@ -334,7 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Open details modal for reserved or sold slots
             reservedSoldSlots.forEach(slot => {
                 slot.addEventListener('click', function() {
                     const slotId = this.getAttribute('data-slot-id');
@@ -343,7 +330,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Close modal
             [closeModalButton, cancelModalButton].forEach(button => {
                 button.addEventListener('click', () => {
                     modal.classList.add('hidden');

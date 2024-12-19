@@ -18,7 +18,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-
+    Route::get('/columbary/all', [ColumbarySlotController::class, 'Loadindex'])->name('columbary.loadIndex');
+    Route::get('/manage/all', [ColumbarySlotController::class, 'loadAllSlots'])->name('columbary.loadAll');
     Route::get('/columbary', [ColumbarySlotController::class, 'index'])->name('columbary.index');
     Route::get('/columbary/list', [ColumbarySlotController::class, 'listSlots'])->name('columbary.list');
     Route::get('/columbary/edit/{id}', [ColumbarySlotController::class, 'edit'])->name('columbary.edit');

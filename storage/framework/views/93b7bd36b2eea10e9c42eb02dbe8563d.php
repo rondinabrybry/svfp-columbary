@@ -9,15 +9,24 @@
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <?php echo e(__('Columbary Slots')); ?>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <?php echo e(__('Columbary Slots')); ?>
 
-        </h2>
+            </h2>
+            <form action="<?php echo e(route('columbary.loadIndex')); ?>" method="GET" class="mt-4">
+                <button
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit">
+                    Load All Data
+                </button>
+            </form>
+        </div>
      <?php $__env->endSlot(); ?>
 
     <div class="py-12">
         <div class="max-w-7xl container mx-auto p-4">
-            <!-- Success/Error Messages -->
+            
             <?php if(session('success')): ?>
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
                     <?php echo e(session('success')); ?>
@@ -31,7 +40,6 @@
                 </div>
             <?php endif; ?>
 
-            <!-- Floors Section -->
             <?php $__currentLoopData = $floors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="mb-6 text-black dark:text-white">
                     <button
@@ -114,7 +122,7 @@
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
                                                             <?php if($slot && $slot->status === 'Available'): ?>
-                                                                <!-- Reservation Form -->
+                                                            
                                                                 <form
                                                                     action="<?php echo e(route('columbary.reserve', $slot->id)); ?>"
                                                                     method="POST" class="flex items-center gap-2">
@@ -131,7 +139,7 @@
                                                                     </button>
                                                                 </form>
                                                             <?php elseif($slot && $slot->status === 'Reserved'): ?>
-                                                                <!-- View Client Info Button -->
+                                                            
                                                                 <button onclick="openModal(<?php echo e($slot->id); ?>)"
                                                                     class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                                                                     View
@@ -164,13 +172,12 @@
         </div>
     </div>
 
-    <!-- Modal remains the same -->
     <div id="client-info-modal"
         class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden z-50 flex justify-center items-center">
         <div class="bg-white rounded-lg shadow-lg w-3/4 md:w-1/2 p-6">
             <h2 class="text-xl font-bold mb-4">Client Information</h2>
             <div id="modal-content" class="space-y-4">
-                <!-- Content will be dynamically loaded -->
+                
             </div>
 
             <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded mt-4">
