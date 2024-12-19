@@ -26,14 +26,12 @@
 
     # Restrict Access to Certain File Types
     <FilesMatch "\.(env|json|log|md|xml|yml|yaml|ini|sh|bat|ps1|sql|bak|swp|dist|phar)$">
-        Order allow,deny
-        Deny from all
+        Require all denied
     </FilesMatch>
 
     # Prevent Access to .htaccess File
     <Files .htaccess>
-        Order allow,deny
-        Deny from all
+        Require all denied
     </Files>
 
     # Set Security Headers
