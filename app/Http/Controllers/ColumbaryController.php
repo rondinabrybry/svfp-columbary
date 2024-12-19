@@ -86,7 +86,6 @@ class ColumbaryController extends Controller
 
     public function listSlots()
     {
-        // Retrieve slots grouped by floor and vault
         $slots = ColumbarySlot::with('payment')
             ->orderBy('floor_number')
             ->orderBy('vault_number')
@@ -124,10 +123,8 @@ class ColumbaryController extends Controller
     
         DB::beginTransaction();
         try {
-            // Update the slot status to Available
             $slot->update(['status' => 'Available']);
     
-            // Delete associated payment if it exists
             if ($slot->payment) {
                 $slot->payment->delete();
             }
@@ -144,7 +141,6 @@ class ColumbaryController extends Controller
     {
         $slot = ColumbarySlot::findOrFail($id);
 
-        // Validate slot data
         $validatedSlotData = $request->validate([
             'slot_number' => 'required|string',
             'vault_number' => 'required|integer',
@@ -153,7 +149,6 @@ class ColumbaryController extends Controller
             'status' => 'required|in:Available,Reserved,Sold,Not Available'
         ]);
 
-        // Validate payment data (only if payment exists or status is not Available)
         $validatedPaymentData = [];
         if ($slot->payment || $validatedSlotData['status'] !== 'Available') {
             $validatedPaymentData = $request->validate([
@@ -163,19 +158,16 @@ class ColumbaryController extends Controller
             ]);
         }
 
-        // Start a database transaction
         DB::beginTransaction();
         try {
-            // Update slot information
             $slot->update($validatedSlotData);
 
-            // Update or create payment information if applicable
             if (!empty($validatedPaymentData)) {
                 if ($slot->payment) {
-                    // Update existing payment
+                    
                     $slot->payment->update($validatedPaymentData);
                 } elseif ($validatedSlotData['status'] !== 'Available') {
-                    // Create new payment if slot is not available
+                    
                     Payment::create([
                         'columbary_slot_id' => $slot->id,
                         'buyer_name' => $validatedPaymentData['buyer_name'] ?? null,
@@ -185,12 +177,12 @@ class ColumbaryController extends Controller
                 }
             }
 
-            // Commit the transaction
+            
             DB::commit();
 
             return redirect()->route('columbary.list')->with('success', 'Slot and payment information updated successfully');
         } catch (\Exception $e) {
-            // Rollback the transaction in case of error
+            
             DB::rollBack();
 
             return back()->with('error', 'Failed to update slot information: ' . $e->getMessage());
@@ -201,7 +193,7 @@ class ColumbaryController extends Controller
     {
         $slot = ColumbarySlot::findOrFail($id);
     
-        // Prevent marking non-available slots
+        
         if ($slot->status !== 'Available') {
             return back()->with('error', 'Only available slots can be marked as Not Available');
         }
@@ -220,11 +212,11 @@ class ColumbaryController extends Controller
             'price' => 'required|numeric|min:0'
         ]);
     
-        // Find the highest slot number across all slots
+        
         $lastSlot = ColumbarySlot::orderByRaw('CAST(slot_number AS UNSIGNED) DESC')->first();
         $startingSlotNumber = $lastSlot ? (int)$lastSlot->slot_number + 1 : 1;
     
-        // Create new slots
+        
         $newSlots = [];
         for ($i = 0; $i < $validatedData['number_of_slots']; $i++) {
             $newSlots[] = ColumbarySlot::create([

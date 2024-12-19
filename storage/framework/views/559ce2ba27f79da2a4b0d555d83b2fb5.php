@@ -116,18 +116,19 @@
                                                                 </form>
                                                             <?php endif; ?>
                                                             
-
-                                                                <?php if(($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold'): ?>
-                                                                <form action="<?php echo e(route('columbary.markNotAvailable', $slot->id)); ?>" method="POST" class="inline-block">
-                                                                    <?php echo csrf_field(); ?>
-                                                                    <?php echo method_field('PATCH'); ?>
-                                                                        <button type="submit"
-                                                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                                                                            onclick="return confirm('Make this slot Not Availalbe?')">
-                                                                            Withhold    
-                                                                        </button>
-                                                                    </form>
-                                                                <?php endif; ?>
+                                                            <?php if(!in_array($slot->status, ['Not Available', 'Reserved']) && (($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold')): ?>
+                                                            <form action="<?php echo e(route('columbary.markNotAvailable', $slot->id)); ?>" method="POST" class="inline-block">
+                                                                <?php echo csrf_field(); ?>
+                                                                <?php echo method_field('PATCH'); ?>
+                                                                <button type="submit"
+                                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                                                                    onclick="return confirm('Make this slot Not Available?')">
+                                                                    Withhold
+                                                                </button>
+                                                            </form>
+                                                        <?php endif; ?>
+                                                        
+                                                        
                                                             </div>
                                                         </td>
                                                     </tr>

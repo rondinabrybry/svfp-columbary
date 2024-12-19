@@ -77,27 +77,62 @@
             }
         </style>
 
+        <style>
+            .slot.available {
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            .slot.reserved {
+                background-color: #3b82f6;
+                color: #ffffff;
+            }
+
+            .slot.sold {
+                background-color: #facc15;
+            }
+
+            .slot.not-available {
+                background-color: #ef4444;
+                color: #ffffff;
+                pointer-events: none;
+                opacity: .75;
+            }
+
+            .vaults {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .vault {
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
+
         <!-- Loading Spinner -->
         <div id="loadingSpinner" class="loading-spinner"></div>
 
         <div id="slotsContainer" style="display: none;">
             <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="floor mb-8">
-                    <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
                     <div class="flex flex-row gap-6">
+                    <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor <?php echo e($floor); ?></h2>
+                </div>
+                <div class="flex flex-row gap-6">
                         <?php for($i = 1; $i <= count($floorVaults); $i++): ?>
                         <p id="floor-<?php echo e($floor); ?>-rack-<?php echo e($i); ?>"
                             class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
                             <?php echo e(chr(64 + $i)); ?> 
                         </p>
                     <?php endfor; ?>
+                </div>
                     
-                    </div>
 
                     <div class="vaults flex flex-wrap gap-6">
                         <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div class="vault hidden border rounded-lg p-4" id="f<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
-                                <h3 class="text-lg font-medium mb-2"> Rack <?php echo e($vault); ?></h3>
+                            <div class="vault hidden border rounded-lg p-4 mt-4" id="f<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
+                                <h3 class="text-lg font-medium mb-4"> Rack <?php echo e(chr(64 + $vault)); ?> </h3>
                                 <div class="slots" id="slots-<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
                                     <?php
                                         $columns = array_chunk($vaultSlots->toArray(), 6); // Divide slots into columns of 6
@@ -189,39 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     </div>
-    <style>
-        .slot.available {
-            background-color: #ffffff;
-            color: #000000;
-        }
-
-        .slot.reserved {
-            background-color: #3b82f6;
-            color: #ffffff;
-        }
-
-        .slot.sold {
-            background-color: #facc15;
-        }
-
-        .slot.not-available {
-            background-color: #ef4444;
-            color: #ffffff;
-            pointer-events: none;
-            opacity: .75;
-        }
-
-        .vaults {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .vault {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    </style>
+   
 
 
     <script>

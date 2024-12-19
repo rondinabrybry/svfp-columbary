@@ -28,7 +28,6 @@ class HomeController extends Controller
     {
         $slot = ColumbarySlot::with('payment')->findOrFail($slotId);
         
-        // Check if the slot is reserved or sold
         if ($slot->status === 'Reserved' || $slot->status === 'Sold') {
             $payment = $slot->payment;
             
@@ -40,7 +39,6 @@ class HomeController extends Controller
                 'buyerName' => $payment->buyer_name ?? null,
                 'contactInfo' => $payment->contact_info ?? null,
                 'paymentStatus' => $payment->payment_status ?? null,
-                // Format the payment date as 'M d, Y h:i A' (e.g., 'Dec 14, 2024 7:16 PM')
                 'paymentDate' => $payment->created_at ? $payment->created_at->format('M d, Y h:i A') : 'N/A'
             ]);
         }
@@ -59,11 +57,9 @@ class HomeController extends Controller
 
         $slot = ColumbarySlot::findOrFail($request->slot_id);
 
-        // Update the slot's status
         $slot->status = 'Reserved';
         $slot->save();
 
-        // Add a payment record
         Payment::create([
             'columbary_slot_id' => $slot->id,
             'buyer_name' => $request->buyer_name,

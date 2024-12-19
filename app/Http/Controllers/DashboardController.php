@@ -13,26 +13,35 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Columbary Slot Statistics
+        
         $totalSlots = ColumbarySlot::count();
         $availableSlots = ColumbarySlot::where('status', 'Available')->count();
         $notAvailableSlots = ColumbarySlot::where('status', 'Not Available')->count();
         $reservedSlots = ColumbarySlot::where('status', 'Reserved')->count();
         $soldSlots = ColumbarySlot::where('status', 'Sold')->count();
 
-    // Slots by Floor and Vault Statistics with Pagination
-    $slotsByFloorAndVault = ColumbarySlot::select('floor_number', 'vault_number')
-        ->selectRaw('COUNT(*) as total_slots')
-        ->selectRaw('SUM(CASE WHEN status = "Available" THEN 1 ELSE 0 END) as available_slots')
-        ->selectRaw('SUM(CASE WHEN status = "Not Available" THEN 1 ELSE 0 END) as notAvailable_slots')
-        ->selectRaw('SUM(CASE WHEN status = "Reserved" THEN 1 ELSE 0 END) as reserved_slots')
-        ->selectRaw('SUM(CASE WHEN status = "Sold" THEN 1 ELSE 0 END) as sold_slots')
-        ->groupBy('floor_number', 'vault_number')
-        ->orderBy('floor_number')
-        ->orderBy('vault_number')
-        ->paginate(5); // Adjust the number to change items per page
+        $dailySales = ColumbarySlot::whereDate('updated_at', Carbon::today())
+            ->where('status', 'Sold')
+            ->sum('price');
 
-        // Floor-level aggregation
+        $monthlySales = ColumbarySlot::whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'Sold')
+            ->sum('price');
+
+        $allTimeSales = ColumbarySlot::where('status', 'Sold')
+            ->sum('price');
+
+        $slotsByFloorAndVault = ColumbarySlot::select('floor_number', 'vault_number')
+            ->selectRaw('COUNT(*) as total_slots')
+            ->selectRaw('SUM(CASE WHEN status = "Available" THEN 1 ELSE 0 END) as available_slots')
+            ->selectRaw('SUM(CASE WHEN status = "Not Available" THEN 1 ELSE 0 END) as notAvailable_slots')
+            ->selectRaw('SUM(CASE WHEN status = "Reserved" THEN 1 ELSE 0 END) as reserved_slots')
+            ->selectRaw('SUM(CASE WHEN status = "Sold" THEN 1 ELSE 0 END) as sold_slots')
+            ->groupBy('floor_number', 'vault_number')
+            ->orderBy('floor_number')
+            ->orderBy('vault_number')
+            ->paginate(5);
+
         $floorSummary = ColumbarySlot::select('floor_number')
             ->selectRaw('COUNT(*) as total_slots')
             ->selectRaw('SUM(CASE WHEN status = "Available" THEN 1 ELSE 0 END) as available_slots')
@@ -43,34 +52,22 @@ class DashboardController extends Controller
             ->orderBy('floor_number')
             ->get();
 
-        // Payment Statistics
-        // Count all payments
         $totalPayments = Payment::count();
-
-        // Count only the 'paid' payments
         $paidPayments = Payment::where('payment_status', 'paid')->count();
-
         $reservedPayments = Payment::where('payment_status', 'reserved')->count();
 
-        // Get the distribution of payment statuses
         $paymentStatusDistribution = Payment::select('payment_status', DB::raw('COUNT(*) as count'))
             ->groupBy('payment_status')
             ->pluck('count', 'payment_status');
 
-        // Recent Payments
         $recentPayments = Payment::with('columbarySlot')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
 
-        // Total Value of Sold Slots
-        $totalValueOfSoldSlots = ColumbarySlot::where('status', 'Sold')
-            ->sum('price');
+        $totalValueOfSoldSlots = ColumbarySlot::where('status', 'Sold')->sum('price');
+        $totalValueOfReservedSlots = ColumbarySlot::where('status', 'Reserved')->sum('price');
 
-            $totalValueOfReservedSlots = ColumbarySlot::where('status', 'Reserved')
-            ->sum('price');
-
-        // Return to the view
         return view('dashboard', [
             'totalSlots' => $totalSlots,
             'availableSlots' => $availableSlots,
@@ -80,12 +77,16 @@ class DashboardController extends Controller
             'slotsByFloor' => $floorSummary,
             'slotsByFloorAndVault' => $slotsByFloorAndVault,
             'totalPayments' => $totalPayments,
-            'paidPayments' => $paidPayments,  // Added paid payments count
+            'paidPayments' => $paidPayments,
             'reservedPayments' => $reservedPayments,
             'paymentStatusDistribution' => $paymentStatusDistribution,
             'recentPayments' => $recentPayments,
             'totalValueOfSoldSlots' => $totalValueOfSoldSlots,
-            'totalValueOfReservedSlots' => $totalValueOfReservedSlots
+            'totalValueOfReservedSlots' => $totalValueOfReservedSlots,
+            'dailySales' => $dailySales,
+            'monthlySales' => $monthlySales,
+            'allTimeSales' => $allTimeSales,
         ]);
-            }
-        }
+    }
+
+}

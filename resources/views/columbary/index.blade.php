@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl container mx-auto p-4">
-            <!-- Success/Error Messages -->
+            
             @if (session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
                     {{ session('success') }}
@@ -19,7 +19,6 @@
                 </div>
             @endif
 
-            <!-- Floors Section -->
             @foreach ($floors as $floor)
                 <div class="mb-6 text-black dark:text-white">
                     <button
@@ -98,7 +97,7 @@
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2">
                                                             @if ($slot && $slot->status === 'Available')
-                                                                <!-- Reservation Form -->
+                                                            
                                                                 <form
                                                                     action="{{ route('columbary.reserve', $slot->id) }}"
                                                                     method="POST" class="flex items-center gap-2">
@@ -115,7 +114,7 @@
                                                                     </button>
                                                                 </form>
                                                             @elseif($slot && $slot->status === 'Reserved')
-                                                                <!-- View Client Info Button -->
+                                                            
                                                                 <button onclick="openModal({{ $slot->id }})"
                                                                     class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                                                                     View
@@ -148,13 +147,12 @@
         </div>
     </div>
 
-    <!-- Modal remains the same -->
     <div id="client-info-modal"
         class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden z-50 flex justify-center items-center">
         <div class="bg-white rounded-lg shadow-lg w-3/4 md:w-1/2 p-6">
             <h2 class="text-xl font-bold mb-4">Client Information</h2>
             <div id="modal-content" class="space-y-4">
-                <!-- Content will be dynamically loaded -->
+                
             </div>
 
             <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded mt-4">

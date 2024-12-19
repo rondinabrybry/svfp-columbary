@@ -67,30 +67,65 @@
             }
         </style>
 
-        <!-- Loading Spinner -->
+        <style>
+            .slot.available {
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            .slot.reserved {
+                background-color: #3b82f6;
+                color: #ffffff;
+            }
+
+            .slot.sold {
+                background-color: #facc15;
+            }
+
+            .slot.not-available {
+                background-color: #ef4444;
+                color: #ffffff;
+                pointer-events: none;
+                opacity: .75;
+            }
+
+            .vaults {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .vault {
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
+
+
         <div id="loadingSpinner" class="loading-spinner"></div>
 
         <div id="slotsContainer" style="display: none;">
             @foreach ($slots as $floor => $floorVaults)
                 <div class="floor mb-8">
-                    <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor {{ $floor }}</h2>
                     <div class="flex flex-row gap-6">
+                    <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">Floor {{ $floor }}</h2>
+                </div>
+                <div class="flex flex-row gap-6">
                         @for ($i = 1; $i <= count($floorVaults); $i++)
                         <p id="floor-{{ $floor }}-rack-{{ $i }}"
                             class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
                             {{ chr(64 + $i) }} 
                         </p>
                     @endfor
+                </div>
                     
-                    </div>
 
                     <div class="vaults flex flex-wrap gap-6">
                         @foreach ($floorVaults as $vault => $vaultSlots)
-                            <div class="vault hidden border rounded-lg p-4" id="f{{ $floor }}-r{{ $vault }}">
-                                <h3 class="text-lg font-medium mb-2"> Rack {{ $vault }}</h3>
+                            <div class="vault hidden border rounded-lg p-4 mt-4" id="f{{ $floor }}-r{{ $vault }}">
+                                <h3 class="text-lg font-medium mb-4"> Rack {{ chr(64 + $vault) }} </h3>
                                 <div class="slots" id="slots-{{ $floor }}-r{{ $vault }}">
                                     @php
-                                        $columns = array_chunk($vaultSlots->toArray(), 6); // Divide slots into columns of 6
+                                        $columns = array_chunk($vaultSlots->toArray(), 6);
                                     @endphp
 
                                     @foreach ($columns as $column)
@@ -115,17 +150,15 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Hide the loading spinner and show the slots container once the page is loaded
+            
             const loadingSpinner = document.getElementById('loadingSpinner');
             const slotsContainer = document.getElementById('slotsContainer');
 
-            // Hide the loading spinner and show the slots container after 2 seconds (simulating loading)
             setTimeout(function () {
                 loadingSpinner.style.display = 'none';
                 slotsContainer.style.display = 'block';
-            }, 1000); // Simulating a 1-second load delay. Adjust as needed.
+            }, 1000);
 
-            // You can use AJAX to dynamically load the slots data, or simply rely on the initial load.
         });
     </script>
 
@@ -140,16 +173,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const rack = rackId[3];
             const slotContainer = document.getElementById('f' + floor + '-r' + rack);
 
-            // Check if this slot is already open
             const isOpen = !slotContainer.classList.contains('hidden');
 
-            // Close all open vaults first
             const openVaults = document.querySelectorAll('.vault:not(.hidden)');
             openVaults.forEach(function(vault) {
                 vault.classList.add('hidden');
             });
 
-            // If this slot was not already open, toggle it to open
             if (!isOpen) {
                 slotContainer.classList.remove('hidden');
             }
@@ -159,7 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     </script>
 
-    <!-- Modal remains the same as previous version -->
     <div id="reservationModal"
         class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -174,43 +203,10 @@ document.addEventListener('DOMContentLoaded', function() {
             @endphp
             
             
-                <!-- Content will be injected dynamically here -->
             </div>
         </div>
     </div>
-    <style>
-        .slot.available {
-            background-color: #ffffff;
-            color: #000000;
-        }
-
-        .slot.reserved {
-            background-color: #3b82f6;
-            color: #ffffff;
-        }
-
-        .slot.sold {
-            background-color: #facc15;
-        }
-
-        .slot.not-available {
-            background-color: #ef4444;
-            color: #ffffff;
-            pointer-events: none;
-            opacity: .75;
-        }
-
-        .vaults {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .vault {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    </style>
+   
 
 
     <script>
@@ -222,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const cancelModalButton = document.getElementById('cancelModal');
             const modalBody = modal.querySelector('.modal-body');
 
-            // Function to render the reservation form
             function renderReservationForm(slotId, slotNumber) {
                 const formHtml = `
                 <form id="reservationForm">
@@ -251,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.querySelector('#reservationModalLabel').innerText = `Reserve Slot ${slotNumber}`;
                 modalBody.innerHTML = formHtml;
 
-                // Re-attach form submission event listener
                 const reservationForm = document.getElementById('reservationForm');
                 reservationForm.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -268,13 +262,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.json())
                         .then(data => {
                             alert(data.message);
-                            location.reload(); // Reload to update the slots
+                            location.reload();
                         })
                         .catch(error => console.error('Error:', error));
                 });
             }
 
-            // Function to render the slot details
             function renderSlotDetails(slotId) {
                 fetch(`/slot-details/${slotId}`)
                     .then(response => response.json())
@@ -299,7 +292,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                         modalBody.innerHTML += closeBtnHtml;
 
-                        // Re-attach the close button event
                         document.getElementById('cancelModal').addEventListener('click', () => {
                             modal.classList.add('hidden');
                         });
@@ -310,7 +302,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
             }
 
-            // Open modal for available slots (Reserve Slot)
             availableSlots.forEach(slot => {
                 slot.addEventListener('click', function() {
                     const slotId = this.getAttribute('data-slot-id');
@@ -320,7 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Open details modal for reserved or sold slots
             reservedSoldSlots.forEach(slot => {
                 slot.addEventListener('click', function() {
                     const slotId = this.getAttribute('data-slot-id');
@@ -329,7 +319,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Close modal
             [closeModalButton, cancelModalButton].forEach(button => {
                 button.addEventListener('click', () => {
                     modal.classList.add('hidden');

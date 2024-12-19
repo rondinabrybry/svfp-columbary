@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl container mx-auto p-4">
-            <!-- Success/Error Messages -->
+            
             @if (session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
                     {{ session('success') }}
@@ -26,10 +26,9 @@
                 </button>
             </div> --}}
 
-            <!-- Floors Section -->
             @foreach ($slots as $floor => $vaults)
             <div class="mb-6 text-black dark:text-white">
-                    <!-- Collapsible Floor Header -->
+                
                     <button
                         class="w-full flex justify-between items-center bg-blue-500 text-white px-4 py-3 rounded-lg shadow focus:outline-none"
                         onclick="toggleCollapse('floor-{{ $floor }}')">
@@ -37,11 +36,9 @@
                         <span>&#9660;</span>
                     </button>
 
-                    <!-- Collapsible Floor Content -->
                     <div id="floor-{{ $floor }}" class="hidden mt-2"> 
                         @foreach ($vaults as $vault => $vaultSlots)
                             <div class="mb-4">
-                                <!-- Collapsible Vault Header -->
                                 <button
                                     class="w-full flex justify-between items-center bg-green-500 text-white px-4 py-2 rounded-lg shadow focus:outline-none"
                                     onclick="toggleCollapse('floor-{{ $floor }}-vault-{{ $vault }}')">
@@ -49,7 +46,6 @@
                                     <span>&#9660;</span>
                                 </button>
 
-                                <!-- Collapsible Vault Content -->
                                 <div id="floor-{{ $floor }}-vault-{{ $vault }}" class="hidden mt-2">
                                     <div class="overflow-x-auto">
                                         <table class="table-auto w-full border-collapse border border-gray-300">
@@ -104,18 +100,19 @@
                                                                 </form>
                                                             @endif
                                                             
-
-                                                                @if (($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold')
-                                                                <form action="{{ route('columbary.markNotAvailable', $slot->id) }}" method="POST" class="inline-block">
-                                                                    @csrf
-                                                                    @method('PATCH')
-                                                                        <button type="submit"
-                                                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                                                                            onclick="return confirm('Make this slot Not Availalbe?')">
-                                                                            Withhold    
-                                                                        </button>
-                                                                    </form>
-                                                                @endif
+                                                            @if (!in_array($slot->status, ['Not Available', 'Reserved']) && (($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold'))
+                                                            <form action="{{ route('columbary.markNotAvailable', $slot->id) }}" method="POST" class="inline-block">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <button type="submit"
+                                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                                                                    onclick="return confirm('Make this slot Not Available?')">
+                                                                    Withhold
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                        
+                                                        
                                                             </div>
                                                         </td>
                                                     </tr>

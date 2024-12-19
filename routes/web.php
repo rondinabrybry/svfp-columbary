@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ColumbaryController;
+use App\Http\Controllers\ColumbarySlotController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\VaultController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -16,24 +18,28 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/columbary', [ColumbaryController::class, 'index'])->name('columbary.index');
-    Route::post('/columbary/reserve/{id}', [ColumbaryController::class, 'reserveSlot'])->name('columbary.reserve');
-    Route::post('/columbary/paid/{id}', [ColumbaryController::class, 'markAsPaid'])->name('columbary.paid');
-    Route::get('/columbary/slot-info/{slotId}', [ColumbaryController::class, 'getSlotInfo'])->name('columbary.slot-info');
 
-    Route::get('/columbary/list', [ColumbaryController::class, 'listSlots'])->name('columbary.list');
-    Route::get('/columbary/edit/{id}', [ColumbaryController::class, 'edit'])->name('columbary.edit');
-    Route::get('/columbary/floor/{floor}', [ColumbaryController::class, 'getVaults'])->name('columbary.getVaults');
-    Route::put('/columbary/update/{id}', [ColumbaryController::class, 'update'])->name('columbary.update');
-    Route::put('/columbary/{id}/make-available', [ColumbaryController::class, 'makeAvailable'])->name('columbary.makeAvailable');
+    Route::get('/columbary', [ColumbarySlotController::class, 'index'])->name('columbary.index');
+    Route::get('/columbary/list', [ColumbarySlotController::class, 'listSlots'])->name('columbary.list');
+    Route::get('/columbary/edit/{id}', [ColumbarySlotController::class, 'edit'])->name('columbary.edit');
+    Route::put('/columbary/update/{id}', [ColumbarySlotController::class, 'update'])->name('columbary.update');
+    Route::post('/columbary/create-slots', [ColumbarySlotController::class, 'createSlots'])->name('columbary.create-slots');
+    Route::put('/columbary/{id}/make-available', [ColumbarySlotController::class, 'makeAvailable'])->name('columbary.makeAvailable');
+    Route::patch('/columbary/{id}/mark-not-available', [ColumbarySlotController::class, 'markNotAvailable'])->name('columbary.markNotAvailable');
+
+
+    Route::post('/columbary/reserve/{id}', [PaymentController::class, 'reserveSlot'])->name('columbary.reserve');
+    Route::post('/columbary/paid/{id}', [PaymentController::class, 'markAsPaid'])->name('columbary.paid');
+
+
+    Route::get('/columbary/floor/{floor}', [VaultController::class, 'getVaults'])->name('columbary.getVaults');
+
+
+    Route::get('/columbary/slot-info/{slotId}', [ColumbarySlotController::class, 'getSlotInfo'])->name('columbary.slot-info');
 
 
     Route::get('/slot-details/{slotId}', [HomeController::class, 'getSlotDetails'])->name('slot.details');
 
-    Route::patch('/columbary/{id}/mark-not-available', [ColumbaryController::class, 'markNotAvailable'])
-    ->name('columbary.markNotAvailable');
-
-    Route::post('/columbary/create-slots', [ColumbaryController::class, 'createSlots'])->name('columbary.create-slots');
 
     Route::get('/home', [HomeController::class, 'showSlots'])->name('home');
     Route::post('/reserve-slot', [HomeController::class, 'reserveSlot'])->name('reserve.slot');
@@ -45,4 +51,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
