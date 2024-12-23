@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ColumbarySlotController;
+use App\Http\Controllers\ColumbaryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VaultController;
 use App\Http\Controllers\DashboardController;
@@ -36,7 +37,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/columbary/floor/{floor}', [VaultController::class, 'getVaults'])->name('columbary.getVaults');
 
 
-    Route::get('/columbary/slot-info/{slotId}', [ColumbarySlotController::class, 'getSlotInfo'])->name('columbary.slot-info');
+    Route::get('/columbary/slot-info/{slotId}', [ColumbaryController::class, 'getSlotInfo'])->name('columbary.slot-info');
 
 
     Route::get('/slot-details/{slotId}', [HomeController::class, 'getSlotDetails'])->name('slot.details');

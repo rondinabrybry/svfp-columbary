@@ -76,6 +76,8 @@ class ColumbaryController extends Controller
             return response()->json([
                 'id' => $payment->id,
                 'buyer_name' => $payment->buyer_name,
+                'buyer_address' => $payment->buyer_address,
+                'buyer_email' => $payment->buyer_email,
                 'contact_info' => $payment->contact_info,
                 'reserved_slots' => $reservedSlots,
             ]);

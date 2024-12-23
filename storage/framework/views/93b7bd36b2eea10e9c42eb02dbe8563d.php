@@ -214,6 +214,8 @@
                     modalContent.innerHTML = `
             <p><strong>id:</strong> ${data.id}</p>
                 <p><strong>Buyer Name:</strong> ${data.buyer_name}</p>
+                <p><strong>Address:</strong> ${data.buyer_address}</p>
+                <p><strong>Email:</strong> ${data.buyer_email}</p>
                 <p><strong>Contact Info:</strong> ${data.contact_info}</p>
                 <p><strong>Reserved Slots:</strong> ${data.reserved_slots ? data.reserved_slots.join(', ') : 'None'}</p>
             `;
