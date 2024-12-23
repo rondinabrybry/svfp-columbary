@@ -14,10 +14,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'isAdmin'])
     ->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/columbary/all', [ColumbarySlotController::class, 'Loadindex'])->name('columbary.loadIndex');
     Route::get('/manage/all', [ColumbarySlotController::class, 'loadAllSlots'])->name('columbary.loadAll');
     Route::get('/columbary', [ColumbarySlotController::class, 'index'])->name('columbary.index');

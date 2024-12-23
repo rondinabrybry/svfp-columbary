@@ -55,6 +55,8 @@
                                                 <tr class="bg-gray-300 dark:bg-gray-700">
                                                     <th class="border border-gray-300 px-4 py-2 text-center">Slot Number
                                                     </th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Level</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Buyer Name
@@ -70,12 +72,15 @@
                                                         <td class="border border-gray-300 px-4 py-2 text-center">
                                                             {{ $slot->slot_number }}</td>
                                                         <td class="border border-gray-300 px-4 py-2">
+                                                            {{ $slot->type }}</td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            {{ $slot->level_number }}</td>
+                                                        <td class="border border-gray-300 px-4 py-2">
                                                             @if ($slot)
-                                                                <span
-                                                                    class="px-2 py-1 rounded-full text-white 
-                                                        {{ $slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500') }}">
-                                                                    {{ $slot->status }}
-                                                                </span>
+                                                            <span class="px-2 py-1 rounded-full text-white 
+                                                            {{ $slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500') }}">
+                                                            {{ $slot->status }}
+                                                        </span> 
                                                             @else
                                                                 <span
                                                                     class="px-2 py-1 rounded-full text-white bg-gray-500">
@@ -129,16 +134,18 @@
                                                                     View
                                                                 </button>
 
-                                                                <form
-                                                                    action="{{ route('columbary.paid', $slot->payment->id) }}"
-                                                                    method="POST" class="inline-block">
-                                                                    @csrf
-                                                                    <button type="submit"
-                                                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                                                                        onclick="return confirm('Mark this slot as paid?')">
-                                                                        Mark as Paid
-                                                                    </button>
-                                                                </form>
+                                                                @if ($slot->payment)
+                                                                    <form
+                                                                        action="{{ route('columbary.paid', $slot->payment->id) }}"
+                                                                        method="POST" class="inline-block">
+                                                                        @csrf
+                                                                        <button type="submit"
+                                                                            class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                                                                            onclick="return confirm('Mark this slot as paid?')">
+                                                                            Mark as Paid
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                     </tr>

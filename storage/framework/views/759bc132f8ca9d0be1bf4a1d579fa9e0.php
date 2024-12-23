@@ -222,16 +222,9 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const slotsContainer = document.getElementById('slotsContainer');
-
-            setTimeout(function() {
-                loadingSpinner.style.display = 'none';
-                slotsContainer.style.display = 'block';
-            }, 1000);
-
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById("slotsContainer").style.display = "block";
         });
     </script>
 

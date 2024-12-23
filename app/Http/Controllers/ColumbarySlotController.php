@@ -9,7 +9,7 @@ class ColumbarySlotController extends Controller
 {
     public function index()
     {
-        $slots = ColumbarySlot::select(['id', 'slot_number', 'floor_number', 'vault_number', 'status', 'price'])
+        $slots = ColumbarySlot::select(['id', 'slot_number', 'floor_number', 'vault_number', 'status', 'price', 'type', 'level_number'])
             ->with(['payment:id,columbary_slot_id,buyer_name,payment_status'])
             ->orderBy('floor_number')
             ->orderBy('vault_number')
@@ -24,7 +24,7 @@ class ColumbarySlotController extends Controller
 
     public function Loadindex()
     {
-        $slots = ColumbarySlot::select(['id', 'slot_number', 'floor_number', 'vault_number', 'status', 'price'])
+        $slots = ColumbarySlot::select(['id', 'slot_number', 'floor_number', 'vault_number', 'status', 'price', 'type', 'level_number'])
             ->with(['payment:id,columbary_slot_id,buyer_name,payment_status'])
             ->orderBy('floor_number')
             ->orderBy('vault_number')
@@ -69,26 +69,57 @@ class ColumbarySlotController extends Controller
 
     public function createSlots(Request $request)
     {
-        $validatedData = $request->validate([
-            'floor_number' => 'required|integer|min:1|max:4',
-            'number_of_slots' => 'required|integer|min:1|max:20',
-            'price' => 'required|numeric|min:0'
+        $request->validate([
+            'floor' => 'required|integer',
+            'rackSpecs' => 'required|string',
         ]);
 
-        $lastSlot = ColumbarySlot::orderByRaw('CAST(slot_number AS UNSIGNED) DESC')->first();
-        $startingSlotNumber = $lastSlot ? (int)$lastSlot->slot_number + 1 : 1;
+        $floor = $request->input('floor');
+        $rackSpecsInput = $request->input('rackSpecs');
+        $rackSpecs = [];
 
-        $newSlots = [];
-        for ($i = 0; $i < $validatedData['number_of_slots']; $i++) {
-            $newSlots[] = ColumbarySlot::create([
-                'slot_number' => (string)($startingSlotNumber + $i),
-                'floor_number' => $validatedData['floor_number'],
-                'status' => 'Available',
-                'price' => $validatedData['price']
-            ]);
+        foreach (explode(',', $rackSpecsInput) as $spec) {
+            list($vaultNumber, $totalSlots) = explode(':', $spec);
+            $rackSpecs[(int)$vaultNumber] = (int)$totalSlots;
         }
 
-        return redirect()->back()->with('success', 'Slots added successfully');
+        $lastSlotNumber = ColumbarySlot::max('slot_number') ?: 0;
+        $slotNumber = $lastSlotNumber + 1;
+
+        foreach ($rackSpecs as $vaultNumber => $totalSlots) {
+            $slotCountInRow = 0;
+
+            for ($i = 1; $i <= $totalSlots; $i++) {
+                $slotCountInRow++;
+
+                if ($slotCountInRow === 5 || $slotCountInRow === 6) {
+                    $price = 40000;
+                    $type = 'standard';
+                } elseif ($slotCountInRow === 2 || $slotCountInRow === 3 || $slotCountInRow === 4) {
+                    $price = 60000;
+                    $type = 'premium_plus';
+                } else {
+                    $price = 50000;
+                    $type = 'premium';
+                }
+
+                // Reset slotCountInRow after reaching 6
+                if ($slotCountInRow === 6) {
+                    $slotCountInRow = 0;
+                }
+                ColumbarySlot::create([
+                    'slot_number' => $slotNumber++,
+                    'floor_number' => $floor,
+                    'vault_number' => $vaultNumber,
+                    'level_number' => $slotCountInRow === 0 ? 6 : $slotCountInRow,
+                    'type' => $type,
+                    'price' => $price,
+                    'status' => 'Available'
+                ]);
+            }
+        }
+
+        return redirect()->route('columbary.list')->with('success', 'Slots added successfully.');
     }
 
     public function update(Request $request, $id)

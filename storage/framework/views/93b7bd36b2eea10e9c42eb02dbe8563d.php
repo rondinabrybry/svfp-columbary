@@ -67,6 +67,8 @@
                                                 <tr class="bg-gray-300 dark:bg-gray-700">
                                                     <th class="border border-gray-300 px-4 py-2 text-center">Slot Number
                                                     </th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Level</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Buyer Name
@@ -82,13 +84,16 @@
                                                         <td class="border border-gray-300 px-4 py-2 text-center">
                                                             <?php echo e($slot->slot_number); ?></td>
                                                         <td class="border border-gray-300 px-4 py-2">
+                                                            <?php echo e($slot->type); ?></td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php echo e($slot->level_number); ?></td>
+                                                        <td class="border border-gray-300 px-4 py-2">
                                                             <?php if($slot): ?>
-                                                                <span
-                                                                    class="px-2 py-1 rounded-full text-white 
-                                                        <?php echo e($slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500')); ?>">
-                                                                    <?php echo e($slot->status); ?>
+                                                            <span class="px-2 py-1 rounded-full text-white 
+                                                            <?php echo e($slot->status === 'Available' ? 'bg-green-500' : ($slot->status === 'Reserved' ? 'bg-yellow-500' : 'bg-red-500')); ?>">
+                                                            <?php echo e($slot->status); ?>
 
-                                                                </span>
+                                                        </span> 
                                                             <?php else: ?>
                                                                 <span
                                                                     class="px-2 py-1 rounded-full text-white bg-gray-500">
@@ -145,16 +150,18 @@
                                                                     View
                                                                 </button>
 
-                                                                <form
-                                                                    action="<?php echo e(route('columbary.paid', $slot->payment->id)); ?>"
-                                                                    method="POST" class="inline-block">
-                                                                    <?php echo csrf_field(); ?>
-                                                                    <button type="submit"
-                                                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                                                                        onclick="return confirm('Mark this slot as paid?')">
-                                                                        Mark as Paid
-                                                                    </button>
-                                                                </form>
+                                                                <?php if($slot->payment): ?>
+                                                                    <form
+                                                                        action="<?php echo e(route('columbary.paid', $slot->payment->id)); ?>"
+                                                                        method="POST" class="inline-block">
+                                                                        <?php echo csrf_field(); ?>
+                                                                        <button type="submit"
+                                                                            class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                                                                            onclick="return confirm('Mark this slot as paid?')">
+                                                                            Mark as Paid
+                                                                        </button>
+                                                                    </form>
+                                                                <?php endif; ?>
                                                             <?php endif; ?>
                                                         </td>
                                                     </tr>
@@ -238,5 +245,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/columbary/index.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/columbary/index.blade.php ENDPATH**/ ?>

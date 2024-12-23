@@ -9,7 +9,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['columbary_slot_id', 'buyer_name', 'contact_info', 'payment_status'];
+    protected $fillable = ['columbary_slot_id', 'buyer_name', 'contact_info', 'payment_status', 'buyer_address', 'buyer_email'];
 
     public function columbarySlot()
     {

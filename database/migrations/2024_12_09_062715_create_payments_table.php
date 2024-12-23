@@ -12,6 +12,8 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->foreignId('columbary_slot_id')->constrained()->onDelete('cascade');
             $table->string('buyer_name');
+            $table->string('buyer_address');
+            $table->string('buyer_email');
             $table->string('contact_info');
             $table->enum('payment_status', ['Not Paid', 'Reserved', 'Paid'])->default('Not Paid');
             $table->timestamps();

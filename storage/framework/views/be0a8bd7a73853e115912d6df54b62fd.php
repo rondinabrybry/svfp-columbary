@@ -24,7 +24,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="slot_number">
-                        Slot Number
+                        Unit Number
                     </label>
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -32,13 +32,32 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="vault_number">
-                        Vault Number
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="slot_number">
+                        Type
                     </label>
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="vault_number" name="vault_number" type="number" value="<?php echo e($slot->vault_number); ?>" required>
+                        id="slot_number" name="slot_number" type="text" value="<?php echo e($slot->type); ?>" required>
                 </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="slot_number">
+                        Level
+                    </label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="slot_number" name="slot_number" type="text" value="<?php echo e($slot->level_number); ?>" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="vault_number">
+                        Rack
+                    </label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="vault_number" name="vault_number" type="text" value="<?php echo e(chr(64 + $slot->vault_number)); ?>" required>
+                </div>
+
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="floor_number">
@@ -127,6 +146,14 @@
             </div>
         </form>
     </div>
+    <script>
+        document.getElementById('editSlotForm').addEventListener('submit', function(event) {
+            const vaultNumberInput = document.getElementById('vault_number');
+            const vaultLetter = vaultNumberInput.value.toUpperCase();
+            const vaultNumber = vaultLetter.charCodeAt(0) - 64;
+            vaultNumberInput.value = vaultNumber;
+        });
+    </script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>

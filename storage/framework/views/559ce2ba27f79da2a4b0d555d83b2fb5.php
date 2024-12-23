@@ -73,6 +73,8 @@
                                             <thead>
                                                 <tr class="bg-gray-300 dark:bg-gray-700">
                                                     <th class="border border-gray-300 px-4 py-2 text-center">Slot Number</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
+                                                    <th class="border border-gray-300 px-4 py-2 text-left">Level</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
                                                     <th class="border border-gray-300 px-4 py-2 text-left">Buyer Name</th>
@@ -87,6 +89,12 @@
                                                             <?php echo e($slot->slot_number); ?>
 
                                                         </td>
+                                                       <td class="border border-gray-300 px-4 py-2">
+                                                            <?php echo e($slot->type); ?>
+
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2">
+                                                            <?php echo e($slot->level_number); ?> 
                                                         <td class="border border-gray-300 px-4 py-2">
                                                             <span
                                                                 class="px-2 py-1 rounded-full text-white 
@@ -154,55 +162,27 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </div>
-    <div id="addSlotsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+    <div id="addSlotsModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">Add New Slots</h3>
-                
-                <form action="<?php echo e(route('columbary.create-slots')); ?>" method="POST" class="mt-4">
-                    <?php echo csrf_field(); ?>
-                    
-                    <div class="mb-4">
-                        <label for="floor_number" class="block text-sm font-bold text-gray-700 text-left">
-                            Floor Number
-                        </label>
-                        <select name="floor_number" id="floor_number" 
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                            <option value="">Select Floor</option>
-                            <?php for($i = 1; $i <= 4; $i++): ?>
-                                <option value="<?php echo e($i); ?>">Floor <?php echo e($i); ?></option>
-                            <?php endfor; ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="number_of_slots" class="block text-sm font-bold text-gray-700 text-left">
-                            Number of Slots
-                        </label>
-                        <input type="number" name="number_of_slots" id="number_of_slots" 
-                               min="1" max="20" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="price" class="block text-sm font-bold text-gray-700 text-left">
-                            Price per Slot
-                        </label>
-                        <input type="number" name="price" id="price" step="0.01" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                    </div>
-
-                    <div class="mt-4 flex justify-between">
-                        <button type="submit" 
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Add Slots
-                        </button>
-                        <button type="button" onclick="closeAddSlotsModal()"
-                                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
+                <div class="mt-2">
+                    <form id="addSlotsForm" method="POST" action="<?php echo e(route('columbary.create-slots')); ?>">
+                        <?php echo csrf_field(); ?>
+                        <div class="mb-4">
+                            <label for="floor" class="block text-gray-700 text-sm font-bold mb-2">Floor:</label>
+                            <input type="number" id="floor" name="floor" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="rackSpecs" class="block text-gray-700 text-sm font-bold mb-2">Rack Specs (e.g., 1:84,2:144):</label>
+                            <input type="text" id="rackSpecs" name="rackSpecs" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add Slots</button>
+                            <button type="button" onclick="closeAddSlotsModal()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
