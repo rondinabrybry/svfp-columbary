@@ -134,16 +134,16 @@
             <div class="bg-white dark:bg-gray-800 text-black dark:text-white p-6 rounded-lg shadow-lg">
                 <div id="clientList">
                     @foreach ($clients as $client)
-                    <a href="#" class="client-name" data-client="{{ json_encode($client) }}">
                         <div class="row-gap hover:bg-gray-700 px-4 py-2 rounded-lg flex flex-row gap-2">
                             <h3 class="text-lg font-semibold">
+                                <a href="#" class="client-name" data-client="{{ json_encode($client) }}">
                                     -
                                     {{ $client->buyer_name }}
+                                </a>
                             </h3>
                             <p class="text-sm bg-yellow-custom p-1 px-4 text-white superbold rounded-lg">{{ $client->paid_count }} Paid</p>
                             <p class="text-sm bg-green-custom p-1 px-4 text-white superbold rounded-lg">{{ $client->reserved_count }} Reserved</p>
                         </div>
-                    </a>
                     @endforeach
                 </div>
             </div>
