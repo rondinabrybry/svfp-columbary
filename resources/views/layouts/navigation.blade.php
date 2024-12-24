@@ -19,11 +19,11 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('columbary.index')" :active="request()->routeIs('columbary.index') || request()->routeIs('columbary.loadIndex')">
-                        {{ __('Columbary') }}
+                        {{ __('Manage') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('columbary.list')" :active="request()->routeIs('columbary.list') || request()->routeIs('columbary.loadAll')">
-                        {{ __('Manage Slots') }}
+                    <x-nav-link :href="route('clients')" :active="request()->routeIs('clients')">
+                        {{ __('Clients') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -86,11 +86,11 @@
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('columbary.index')" :active="request()->routeIs('columbary.index')">
-                {{ __('Columbary') }}
+                {{ __('Manage') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('columbary.list')" :active="request()->routeIs('columbary.list')">
-                {{ __('Manage Slots') }}
+            <x-responsive-nav-link :href="route('clients')" :active="request()->routeIs('clients')">
+                {{ __('Clients') }}
             </x-responsive-nav-link>
         </div>
 

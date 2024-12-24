@@ -1,0 +1,2 @@
+<p>Dear {{ $reservation->buyer_name }},</p>
+<p>We regret to inform you that your reservation for slot {{ $reservation->columbary_slot_id }} has been forfeited due to non-payment. The reservation fee is non-refundable as stated in the contract.</p>

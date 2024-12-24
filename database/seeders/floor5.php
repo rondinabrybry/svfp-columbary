@@ -68,7 +68,7 @@ class floor5 extends Seeder
 
                 $formattedUnitNumber = str_pad($unitNumber++, 3, '0', STR_PAD_LEFT);
                 $levelNumber = $slotCountInRow === 0 ? 6 : $slotCountInRow;
-                $unitId = "{$floor}" . chr(64 + $vaultNumber) . "{$levelNumber} - {$formattedUnitNumber}{$side}";
+                $unitId = "{$floor}" . chr(64 + $vaultNumber) . "{$levelNumber}-{$formattedUnitNumber}{$side}";
 
                 ColumbarySlot::create([
                     'unit_number' => $formattedUnitNumber,

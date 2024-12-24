@@ -129,7 +129,7 @@
                     Update Slot
                 </button>
                 
-                <a href="{{ route('columbary.loadAll') }}"
+                <a href="{{ route('columbary.index') }}"
                     class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                     Cancel
                 </a>

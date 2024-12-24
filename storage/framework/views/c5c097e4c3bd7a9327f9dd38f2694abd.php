@@ -207,6 +207,12 @@
             .vault.not-pop {
                 display: none;
             }
+
+            .floor-count.active {
+                background-color: #4f46e5;
+                /* Indigo color, you can change this */
+                color: white;
+            }
         </style>
 
         <div id="loadingSpinner" class="loading-spinner"></div>
@@ -215,7 +221,9 @@
             <div class="floors flex flex-row gap-6">
                 <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="floor mb-8" data-floor="<?php echo e($floor); ?>">
-                        <h2 class="text-2xl text-black dark:text-white font-semibold mb-4"><?php echo e(__('Floor')); ?> <?php echo e($floor); ?></h2>
+                        <h2 class="text-2xl text-black dark:text-white font-semibold mb-4"><?php echo e(__('Floor')); ?>
+
+                            <?php echo e($floor); ?></h2>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
@@ -235,38 +243,64 @@
             <div class="vaults flex flex-wrap gap-6">
                 <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="vault border rounded-lg p-4 mt-4 not-pop" id="f<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
-                        <h3 class="text-lg font-medium mb-4"> <?php echo e(__('Rack')); ?> <?php echo e(chr(64 + $vault)); ?> </h3>
-                        <div class="slots" id="slots-<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
-                            <?php
-                                $columns = array_chunk($vaultSlots->toArray(), 6);
-                            ?>
-                            <div class="flex flex-col gap-2" style="gap: 19.7px;">
-                                <p class="level-tag"><?php echo e(__('Level 6: ')); ?></p>
-                                <p class="level-tag"><?php echo e(__('Level 5: ')); ?></p>
-                                <p class="level-tag"><?php echo e(__('Level 3: ')); ?></p>
-                                <p class="level-tag"><?php echo e(__('Level 4: ')); ?></p>
-                                <p class="level-tag"><?php echo e(__('Level 2: ')); ?></p>
-                                <p class="level-tag"><?php echo e(__('Level 1: ')); ?></p>
-                            </div>
-                            <?php $__currentLoopData = $columns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $column): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <div class="column">
-                                    <?php $__currentLoopData = $column; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <div class="slot <?php echo e(strtolower(str_replace(' ', '-', $slot['status']))); ?>"
-                                            data-slot-id="<?php echo e($slot['id']); ?>"
-                                            data-slot-number="<?php echo e($slot['unit_id']); ?> <?php echo e($slot['type']); ?>">
-                                            <?php echo e($slot['unit_number']); ?><?php echo e($slot['side']); ?>
-
-                                        </div>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <div class="vault border rounded-lg p-4 mt-4 not-pop"
+                            id="f<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
+                            <h3 class="text-lg font-medium mb-4"> <?php echo e(__('Rack')); ?> <?php echo e(chr(64 + $vault)); ?> </h3>
+                            <div class="slots" id="slots-<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
+                                <?php
+                                    $columns = array_chunk($vaultSlots->toArray(), 6);
+                                ?>
+                                <div class="flex flex-col gap-2" style="gap: 19.7px;">
+                                    <p class="level-tag"><?php echo e(__('Level 6: ')); ?></p>
+                                    <p class="level-tag"><?php echo e(__('Level 5: ')); ?></p>
+                                    <p class="level-tag"><?php echo e(__('Level 3: ')); ?></p>
+                                    <p class="level-tag"><?php echo e(__('Level 4: ')); ?></p>
+                                    <p class="level-tag"><?php echo e(__('Level 2: ')); ?></p>
+                                    <p class="level-tag"><?php echo e(__('Level 1: ')); ?></p>
                                 </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $columns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $column): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="column">
+                                        <?php $__currentLoopData = $column; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="slot <?php echo e(strtolower(str_replace(' ', '-', $slot['status']))); ?>"
+                                                data-slot-id="<?php echo e($slot['id']); ?>"
+                                                data-slot-number="<?php echo e($slot['unit_id']); ?> <?php echo e($slot['type']); ?>">
+                                                <?php echo e($slot['unit_number']); ?><?php echo e($slot['side']); ?>
+
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </div>
                         </div>
-                    </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const floorCounts = document.querySelectorAll('.floor-count');
+                let activeElement = null;
+
+                floorCounts.forEach(element => {
+                    element.addEventListener('click', function() {
+                        if (this === activeElement) {
+                            // If clicking the same element, remove active class
+                            this.classList.remove('active');
+                            activeElement = null;
+                        } else {
+                            // Remove active class from previous element
+                            if (activeElement) {
+                                activeElement.classList.remove('active');
+                            }
+                            // Add active class to clicked element
+                            this.classList.add('active');
+                            activeElement = this;
+                        }
+                    });
+                });
+            });
+        </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -291,7 +325,9 @@
                                 }
                             } else {
                                 unit.classList.remove('active');
-                                document.querySelector(`.floor[data-floor="${unit.id.split('-')[1]}"]`).classList.remove('active');
+                                document.querySelector(
+                                        `.floor[data-floor="${unit.id.split('-')[1]}"]`)
+                                    .classList.remove('active');
                             }
                         });
                         vaults.forEach(vault => {
@@ -324,12 +360,12 @@
             });
         </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("loadingSpinner").style.display = "none";
-        document.getElementById("slotsContainer").style.display = "block";
-    });
-</script>   
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("loadingSpinner").style.display = "none";
+                document.getElementById("slotsContainer").style.display = "block";
+            });
+        </script>
 
         <div id="reservationModal"
             class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
@@ -378,64 +414,122 @@
                 const modalBody = modal.querySelector('.modal-body');
 
                 function renderReservationForm(slotId, slotNumber) {
-                    const formHtml = `
-                    <form id="reservationForm">
-                        <?php echo csrf_field(); ?>
-                        <input type="hidden" name="slot_id" id="slotId" value="${slotId}">
+    fetch(`/slot-details/${slotId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.price) {
+                alert('Unable to fetch slot price');
+                return;
+            }
 
-                        <div class="mb-4">
-                            <div id="manilaTime">
-                        </div>
-                        <div class="mb-4">
-                            <label for="buyerName" class="block text-sm font-medium mb-1">Name</label>
-                            <input type="text" class="form-input w-full rounded border-gray-300" id="buyerName" name="buyer_name" required>
-                        </div>
+            const formHtml = `
+            <form id="reservationForm">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="slot_id" id="slotId" value="${slotId}">
+                <input type="hidden" name="price" id="price">
 
-                        <div class="mb-4">
-                            <label for="buyerAddress" class="block text-sm font-medium mb-1">Address</label>
-                            <input type="text" class="form-input w-full rounded border-gray-300" id="buyerAddress" name="buyer_address" required>
-                        </div>
+                <div class="mb-4">
+                    <p><strong>Price:</strong> ${data.price}</p>
+                    <div id="manilaTime"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="buyerName" class="block text-sm font-medium mb-1">Name</label>
+                    <input type="text" class="form-input w-full rounded border-gray-300" id="buyerName" name="buyer_name" required>
+                </div>
 
-                        <div class="mb-4">
-                            <label for="buyerEmail" class="block text-sm font-medium mb-1">Email</label>
-                            <input type="email" class="form-input w-full rounded border-gray-300" id="buyerEmail" name="buyer_email" required>
-                        </div>
+                <div class="mb-4">
+                    <label for="buyerAddress" class="block text-sm font-medium mb-1">Address</label>
+                    <input type="text" class="form-input w-full rounded border-gray-300" id="buyerAddress" name="buyer_address" required>
+                </div>
 
-                        <div class="mb-4">
-                            <label for="contactInfo" class="block text-sm font-medium mb-1">Contact Number</label>
-                            <input type="text" class="form-input w-full rounded border-gray-300" id="contactInfo"
-                                name="contact_info" required>
-                        </div>
-                        <div class="flex justify-end space-x-3">
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Reserve</button>
-                        </div>
-                    </form>
-                `;
-                    modal.querySelector('#reservationModalLabel').innerText = `Reserve Unit ${slotNumber}`;
-                    modalBody.innerHTML = formHtml;
+                <div class="mb-4">
+                    <label for="buyerEmail" class="block text-sm font-medium mb-1">Email</label>
+                    <input type="email" class="form-input w-full rounded border-gray-300" id="buyerEmail" name="buyer_email" required>
+                </div>
 
-                    const reservationForm = document.getElementById('reservationForm');
-                    reservationForm.addEventListener('submit', function(e) {
+                <div class="mb-4">
+                    <label for="contactInfo" class="block text-sm font-medium mb-1">Contact Number</label>
+                    <input type="text" class="form-input w-full rounded border-gray-300" id="contactInfo"
+                        name="contact_info" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Reservation Type</label>
+                    <div>
+                        <input type="checkbox" id="reserve" name="reservation_type" value="reserve">
+                        <label for="reserve">Reserve</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="full" name="reservation_type" value="full">
+                        <label for="full">Full</label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Reserve</button>
+                </div>
+            </form>
+            `;
+
+            modal.querySelector('#reservationModalLabel').innerText = `Reserve Unit ${slotNumber}`;
+            modalBody.innerHTML = formHtml;
+
+            // Add the script after the form is rendered
+            const script = document.createElement('script');
+            script.innerHTML = `
+                document.getElementById('reserve').addEventListener('change', function() {
+                    if (this.checked) {
+                        document.getElementById('full').checked = false;
+                        document.getElementById('price').value = 10000;
+                    }
+                });
+
+                document.getElementById('full').addEventListener('change', function() {
+                    if (this.checked) {
+                        document.getElementById('reserve').checked = false;
+                        document.getElementById('price').value = ${data.price};
+                    }
+                });
+
+                document.getElementById('reservationForm').addEventListener('submit', function(e) {
+                    const reserveChecked = document.getElementById('reserve').checked;
+                    const fullChecked = document.getElementById('full').checked;
+
+                    if (!reserveChecked && !fullChecked) {
                         e.preventDefault();
-                        const formData = new FormData(this);
+                        alert('Please select at least one reservation type.');
+                    }
+                });
+            `;
+            modalBody.appendChild(script);
 
-                        fetch("<?php echo e(route('reserve.slot')); ?>", {
-                                method: "POST",
-                                body: formData,
-                                headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                        .getAttribute('content'),
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                alert(data.message);
-                                location.reload();
-                            })
-                            .catch(error => console.error('Error:', error));
-                    });
-                }
+            const reservationForm = document.getElementById('reservationForm');
+            reservationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch("<?php echo e(route('reserve.slot')); ?>", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content'),
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        location.reload();
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching slot details:', error);
+            alert('Unable to fetch slot details');
+        });
+}
 
                 function renderSlotDetails(slotId) {
                     fetch(`/slot-details/${slotId}`)
@@ -444,28 +538,29 @@
                             const getRackLetter = (vaultNumber) => String.fromCharCode(64 + vaultNumber);
 
                             const detailsHtml = `
-                        <div class="slot-details">
-                            <p><strong>Type:</strong> ${data.type}</p>
-                            <p><strong>Floor:</strong> ${data.floor}</p>
-                            <p><strong>Rack:</strong> ${getRackLetter(data.vault)}</p>
-                            <p><strong>Level:</strong> ${data.level}</p>
-                            <p><strong>Unit:</strong> ${data.unit}</p>
-                            <p><strong>Status:</strong> ${data.status}</p>
-                            <p><strong>Buyer Name:</strong> ${data.buyerName || 'N/A'}</p>
-                            <p><strong>Buyer Address:</strong> ${data.buyerAddress || 'N/A'}</p>
-                            <p><strong>Buyer Email:</strong> ${data.buyerEmail || 'N/A'}</p>
-                            <p><strong>Contact Info:</strong> ${data.contactInfo || 'N/A'}</p>
-                            <p><strong>Payment Status:</strong> ${data.paymentStatus || 'N/A'}</p>
-                            <p><strong>Payment Date:</strong> ${data.paymentDate || 'N/A'}</p>
-                        </div>
-                    `;
+            <div class="slot-details">
+                <h1><strong>Price:</strong> ${data.price}</h1>
+                <p><strong>Type:</strong> ${data.type}</p>
+                <p><strong>Floor:</strong> ${data.floor}</p>
+                <p><strong>Rack:</strong> ${getRackLetter(data.vault)}</p>
+                <p><strong>Level:</strong> ${data.level}</p>
+                <p><strong>Unit:</strong> ${data.unit}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+                <p><strong>Buyer Name:</strong> ${data.buyerName || 'N/A'}</p>
+                <p><strong>Buyer Address:</strong> ${data.buyerAddress || 'N/A'}</p>
+                <p><strong>Buyer Email:</strong> ${data.buyerEmail || 'N/A'}</p>
+                <p><strong>Contact Info:</strong> ${data.contactInfo || 'N/A'}</p>
+                <p><strong>Payment Status:</strong> ${data.paymentStatus || 'N/A'}</p>
+                <p><strong>Payment Date:</strong> ${data.paymentDate || 'N/A'}</p>
+            </div>
+        `;
                             modal.querySelector('#reservationModalLabel').innerText =
-                                `Unit ${data.slotNumber} Details`;
+                                `Unit ${data.unitId} Details`;
                             modalBody.innerHTML = detailsHtml;
 
                             const closeBtnHtml = `
-                        <button type="button" id="cancelModal"></button>
-                    `;
+            <button type="button" id="cancelModal"></button>
+        `;
                             modalBody.innerHTML += closeBtnHtml;
 
                             document.getElementById('cancelModal').addEventListener('click', () => {
@@ -511,4 +606,5 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?><?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/home.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/home.blade.php ENDPATH**/ ?>

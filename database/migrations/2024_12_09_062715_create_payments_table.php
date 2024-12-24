@@ -16,10 +16,10 @@ class CreatePaymentsTable extends Migration
             $table->string('buyer_email');
             $table->string('contact_info');
             $table->enum('payment_status', ['Not Paid', 'Reserved', 'Paid'])->default('Not Paid');
+            $table->decimal('price', 10, 2); // Add price column
             $table->timestamps();
         });
     }
-
     public function down()
     {
         Schema::dropIfExists('payments');

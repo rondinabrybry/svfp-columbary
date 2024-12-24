@@ -49,11 +49,14 @@ class PaymentController extends Controller
     public function markAsPaid($id)
     {
         $payment = Payment::findOrFail($id);
+        $columbarySlot = $payment->columbarySlot;
+    
         $payment->payment_status = 'Paid';
+        $payment->price = $columbarySlot->price;
         $payment->save();
-
-        $payment->columbarySlot->update(['status' => 'Sold']);
-
+    
+        $columbarySlot->update(['status' => 'Sold']);
+    
         return back()->with('success', 'Payment marked as paid.');
     }
 }

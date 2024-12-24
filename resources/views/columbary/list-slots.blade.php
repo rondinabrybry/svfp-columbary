@@ -105,28 +105,28 @@
                                                                 </a>
 
                                                                 @if ($slot->status === 'Reserved')
-                                                                <form action="{{ route('columbary.makeAvailable', $slot->id) }}" method="POST">
+                                                                    <form action="{{ route('columbary.makeAvailable', $slot->id) }}" method="POST">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <button
+                                                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                                                                            type="submit">
+                                                                            Remove Reserved
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
+                                                            
+                                                            @if (!in_array($slot->status, ['Not Available', 'Reserved']) && (($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold'))
+                                                                <form action="{{ route('columbary.markNotAvailable', $slot->id) }}" method="POST" class="inline-block">
                                                                     @csrf
-                                                                    @method('PUT')
-                                                                    <button
+                                                                    @method('PATCH')
+                                                                    <button type="submit"
                                                                         class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                                                                        type="submit">
-                                                                        Remove Reserved
+                                                                        onclick="return confirm('Make this slot Not Available?')">
+                                                                        Withhold
                                                                     </button>
                                                                 </form>
                                                             @endif
-                                                            
-                                                            @if (!in_array($slot->status, ['Not Available', 'Reserved']) && (($slot->payment && $slot->payment->payment_status !== 'Paid') || $slot->status !== 'Sold'))
-                                                            <form action="{{ route('columbary.markNotAvailable', $slot->id) }}" method="POST" class="inline-block">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit"
-                                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                                                                    onclick="return confirm('Make this slot Not Available?')">
-                                                                    Withhold
-                                                                </button>
-                                                            </form>
-                                                        @endif
                                                         
                                                         
                                                             </div>

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ColumbarySlot;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -149,8 +150,14 @@ class ColumbarySlotController extends Controller
     public function makeAvailable($id)
     {
         $slot = ColumbarySlot::findOrFail($id);
+    
+        // Delete the related payment records
+        Payment::where('columbary_slot_id', $slot->id)->delete();
+    
+        // Update the slot status to 'Available'
         $slot->update(['status' => 'Available']);
-        return redirect()->back()->with('success', 'Slot is now available');
+    
+        return redirect()->back()->with('success', 'Slot is now available and related payments have been deleted.');
     }
 
     public function markNotAvailable($id)

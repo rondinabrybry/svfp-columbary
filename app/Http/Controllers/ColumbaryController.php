@@ -63,16 +63,23 @@ class ColumbaryController extends Controller
         try {
             $slot = ColumbarySlot::with('payment')->findOrFail($slotId);
             $payment = $slot->payment;
-
+    
             if (!$payment) {
                 return response()->json(['error' => 'No payment information found'], 404);
             }
-
-            // Find all slots reserved by the same buyer
+    
+            // Find all slots reserved by the same buyer with payment_status 'Reserved'
             $reservedSlots = ColumbarySlot::whereHas('payment', function ($query) use ($payment) {
-                $query->where('buyer_name', $payment->buyer_name);
+                $query->where('buyer_name', $payment->buyer_name)
+                      ->where('payment_status', 'Reserved');
             })->pluck('slot_number');
-
+    
+            // Find all slots owned by the same buyer with payment_status 'Paid'
+            $ownedSlots = ColumbarySlot::whereHas('payment', function ($query) use ($payment) {
+                $query->where('buyer_name', $payment->buyer_name)
+                      ->where('payment_status', 'Paid');
+            })->pluck('slot_number');
+    
             return response()->json([
                 'id' => $payment->id,
                 'buyer_name' => $payment->buyer_name,
@@ -80,6 +87,7 @@ class ColumbaryController extends Controller
                 'buyer_email' => $payment->buyer_email,
                 'contact_info' => $payment->contact_info,
                 'reserved_slots' => $reservedSlots,
+                'owned_slots' => $ownedSlots,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to load slot information.'], 500);
