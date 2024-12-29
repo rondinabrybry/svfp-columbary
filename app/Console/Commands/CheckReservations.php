@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Reservation;
 use App\Jobs\SendReminderEmail;
+use App\Jobs\SendForfeitureEmail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -22,14 +23,26 @@ class CheckReservations extends Command
     {
         Log::info('Running reservations:check command');
 
-        $reservations = Reservation::where('payment_status', 'Reserved')
+        // Send reminder emails for reservations with 10 days left to pay
+        $reminderReservations = Reservation::where('payment_status', 'Reserved')
             ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(1))
             ->get();
 
-        foreach ($reservations as $reservation) {
+        foreach ($reminderReservations as $reservation) {
             SendReminderEmail::dispatch($reservation);
             $this->info('Reminder email sent to: ' . $reservation->buyer_email);
             Log::info('Reminder email sent to: ' . $reservation->buyer_email);
+        }
+
+        // Send forfeiture emails for reservations not paid after 30 days
+        $forfeitureReservations = Reservation::where('payment_status', 'Reserved')
+            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(2))
+            ->get();
+
+        foreach ($forfeitureReservations as $reservation) {
+            SendForfeitureEmail::dispatch($reservation);
+            $this->info('Forfeiture email sent to: ' . $reservation->buyer_email);
+            Log::info('Forfeiture email sent to: ' . $reservation->buyer_email);
         }
 
         return 0;
