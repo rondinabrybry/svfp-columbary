@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('reservations:check')->daily();
         $schedule->call(function () {
             Log::info('Scheduler is running');
-        })->daily();
+        })->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
