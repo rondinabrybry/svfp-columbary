@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class SendReminderEmail implements ShouldQueue
 {
@@ -34,5 +35,6 @@ class SendReminderEmail implements ShouldQueue
     public function handle()
     {
         Mail::to($this->reservation->buyer_email)->send(new ReminderMail($this->reservation));
+        Log::info('Reminder email sent to: ' . $this->reservation->buyer_email);
     }
 }

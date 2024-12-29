@@ -49,6 +49,7 @@ class SendReservationEmail implements ShouldQueue
     public function handle()
     {
         Mail::to($this->reservation->buyer_email)->send(new ReservationMail($this->reservation));
+        Log::info('Reservation email sent to: ' . $this->reservation->buyer_email);
     }
 
     /**
