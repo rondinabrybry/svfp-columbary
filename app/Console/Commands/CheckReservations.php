@@ -21,7 +21,7 @@ class CheckReservations extends Command
     public function handle()
     {
         $reservations = Reservation::where('payment_status', 'Reserved')
-            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila'))
+            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(20))
             ->get();
 
         foreach ($reservations as $reservation) {
