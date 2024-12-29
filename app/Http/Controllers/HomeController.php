@@ -4,8 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\ColumbarySlot;
 use App\Models\Payment;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use App\Jobs\SendReservationEmail;
+use App\Mail\ReservationMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -100,8 +106,37 @@ class HomeController extends Controller
                 'price' => $request->price,
             ]);
     
-            return response()->json(['message' => 'Slot reserved successfully!']);
+            $emailStatus = 'Email not sent';
+    
+            if ($slot->status === 'Reserved') {
+                $reservation = Reservation::create([
+                    'columbary_slot_id' => $slot->id,
+                    'unit_id' => $slot->unit_id,
+                    'buyer_name' => $request->buyer_name,
+                    'buyer_email' => $request->buyer_email,
+                    'payment_status' => 'Reserved',
+                    'price' => $request->price,
+                    'unit_price' => $slot->price, // Assuming unit_price is the same as slot price
+                    'purchase_date' => Carbon::now('Asia/Manila'),
+                    'floor_number' => $slot->floor_number,
+                    'vault_number' => $slot->vault_number,
+                    'level_number' => $slot->level_number,
+                    'type' => $slot->type,
+                ]);
+    
+                try {
+                    // Dispatch the job to send the reservation email
+                    SendReservationEmail::dispatch($reservation);
+                    $emailStatus = 'Email sent successfully';
+                } catch (\Exception $e) {
+                    Log::error('Error sending reservation email: ' . $e->getMessage());
+                    $emailStatus = 'Failed to send email';
+                }
+            }
+    
+            return response()->json(['message' => 'Slot reserved successfully!', 'email_status' => $emailStatus]);
         } catch (\Exception $e) {
+            Log::error('Error reserving slot: ' . $e->getMessage());
             return response()->json(['message' => 'An error occurred while reserving the slot.'], 500);
         }
     }

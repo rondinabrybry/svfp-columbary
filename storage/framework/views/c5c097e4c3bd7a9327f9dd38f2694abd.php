@@ -21,7 +21,7 @@
             <p class="text-xs bg-white p-2 text-black font-bold rounded-lg"><?php echo e(__('Available')); ?></p>
             <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg"><?php echo e(__('Not Available')); ?></p>
             <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg"><?php echo e(__('Reserved')); ?></p>
-            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg"><?php echo e(__('Sold')); ?></p>
+            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-    lg"><?php echo e(__('Sold')); ?></p>
         </div>
 
         <style>
@@ -45,7 +45,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 3rem;
+                width: 3.5rem;
                 height: 3rem;
                 border: 1px solid #000;
                 text-align: center;
@@ -190,6 +190,8 @@
                 border: 2px solid transparent;
                 padding: 10px;
                 margin: 5px;
+                cursor: pointer;
+                font-size: .800rem;
             }
 
             .slot.active {
@@ -264,7 +266,7 @@
                                             <div class="slot <?php echo e(strtolower(str_replace(' ', '-', $slot['status']))); ?>"
                                                 data-slot-id="<?php echo e($slot['id']); ?>"
                                                 data-slot-number="<?php echo e($slot['unit_id']); ?> <?php echo e($slot['type']); ?>">
-                                                <?php echo e($slot['unit_number']); ?><?php echo e($slot['side']); ?>
+                                                <?php echo e($slot['unit_id']); ?>
 
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -414,15 +416,15 @@
                 const modalBody = modal.querySelector('.modal-body');
 
                 function renderReservationForm(slotId, slotNumber) {
-    fetch(`/slot-details/${slotId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (!data.price) {
-                alert('Unable to fetch slot price');
-                return;
-            }
+                    fetch(`/slot-details/${slotId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.price) {
+                                alert('Unable to fetch slot price');
+                                return;
+                            }
 
-            const formHtml = `
+                            const formHtml = `
             <form id="reservationForm">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="slot_id" id="slotId" value="${slotId}">
@@ -466,18 +468,18 @@
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Reserve</button>
+                    <button type="submit" id="reserveButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Reserve</button>
                 </div>
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;"></div>
             </form>
             `;
 
-            modal.querySelector('#reservationModalLabel').innerText = `Reserve Unit ${slotNumber}`;
-            modalBody.innerHTML = formHtml;
+                            modal.querySelector('#reservationModalLabel').innerText = `Reserve Unit ${slotNumber}`;
+                            modalBody.innerHTML = formHtml;
 
-            // Add the script after the form is rendered
-            const script = document.createElement('script');
-            script.innerHTML = `
+                            // Add the script after the form is rendered
+                            const script = document.createElement('script');
+                            script.innerHTML = `
                 document.getElementById('reserve').addEventListener('change', function() {
                     if (this.checked) {
                         document.getElementById('full').checked = false;
@@ -502,34 +504,49 @@
                     }
                 });
             `;
-            modalBody.appendChild(script);
+                            modalBody.appendChild(script);
 
-            const reservationForm = document.getElementById('reservationForm');
-            reservationForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
+                            const reservationForm = document.getElementById('reservationForm');
+                            reservationForm.addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                const formData = new FormData(this);
 
-                fetch("<?php echo e(route('reserve.slot')); ?>", {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content'),
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                        location.reload();
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching slot details:', error);
-            alert('Unable to fetch slot details');
-        });
-}
+                                // Show loading spinner and disable button
+                                const reserveButton = document.getElementById('reserveButton');
+                                const loadingSpinner = document.getElementById('loadingSpinner');
+                                reserveButton.disabled = true;
+                                loadingSpinner.style.display = 'block';
+
+                                fetch("<?php echo e(route('reserve.slot')); ?>", {
+                                        method: "POST",
+                                        body: formData,
+                                        headers: {
+                                            'X-CSRF-TOKEN': document.querySelector(
+                                                    'meta[name="csrf-token"]')
+                                                .getAttribute('content'),
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        alert(data.message);
+                                        location.reload();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('An error occurred while reserving the slot.');
+                                    })
+                                    .finally(() => {
+                                        // Hide loading spinner and enable button
+                                        reserveButton.disabled = false;
+                                        loadingSpinner.style.display = 'none';
+                                    });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching slot details:', error);
+                            alert('Unable to fetch slot details');
+                        });
+                }
 
                 function renderSlotDetails(slotId) {
                     fetch(`/slot-details/${slotId}`)
