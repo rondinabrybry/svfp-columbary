@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Reservation;
 use App\Jobs\SendReminderEmail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CheckReservations extends Command
 {
@@ -25,6 +26,8 @@ class CheckReservations extends Command
 
         foreach ($reservations as $reservation) {
             SendReminderEmail::dispatch($reservation);
+            $this->info('Reminder email sent to: ' . $reservation->buyer_email);
+            Log::info('Reminder email sent to: ' . $reservation->buyer_email);
         }
 
         return 0;

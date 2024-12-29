@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Log;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('queue:work --stop-when-empty')->everyMinute();
         $schedule->call(function () {
             Log::info('Scheduler is running');
-        })->daily();
+        })->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
