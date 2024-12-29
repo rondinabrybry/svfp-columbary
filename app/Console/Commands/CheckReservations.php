@@ -20,6 +20,8 @@ class CheckReservations extends Command
 
     public function handle()
     {
+        Log::info('Running reservations:check command');
+
         $reservations = Reservation::where('payment_status', 'Reserved')
             ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(20))
             ->get();

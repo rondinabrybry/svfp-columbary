@@ -19,7 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('reservations:check')->daily();
-        $schedule->command('queue:work --stop-when-empty')->everyMinute();
         $schedule->call(function () {
             Log::info('Scheduler is running');
         })->everyMinute();
