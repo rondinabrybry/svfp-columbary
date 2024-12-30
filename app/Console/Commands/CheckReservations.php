@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 use App\Models\Reservation;
 use App\Jobs\SendReminderEmail;
 use App\Jobs\SendForfeitureEmail;
+use App\Models\Forfeit;
+use App\Models\ColumbarySlot;
+use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -39,47 +42,41 @@ class CheckReservations extends Command
             ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(2))
             ->get();
 
-        foreach ($forfeitureReservations as $reservation) {
-            SendForfeitureEmail::dispatch($reservation);
-            $this->info('Forfeiture email sent to: ' . $reservation->buyer_email);
-            Log::info('Forfeiture email sent to: ' . $reservation->buyer_email);
-        }
+            foreach ($forfeitureReservations as $reservation) {
+                SendForfeitureEmail::dispatch($reservation);
+                $this->info('Forfeiture email sent to: ' . $reservation->buyer_email);
+                Log::info('Forfeiture email sent to: ' . $reservation->buyer_email);
+    
+                // Move the data to the forfeits table
+                Forfeit::create([
+                    'columbary_slot_id' => $reservation->columbary_slot_id,
+                    'unit_id' => $reservation->unit_id,
+                    'buyer_name' => $reservation->buyer_name,
+                    'buyer_email' => $reservation->buyer_email,
+                    'payment_status' => 'Forfeit',
+                    'price' => $reservation->price,
+                    'unit_price' => $reservation->unit_price,
+                    'purchase_date' => $reservation->purchase_date,
+                    'floor_number' => $reservation->floor_number,
+                    'vault_number' => $reservation->vault_number,
+                    'level_number' => $reservation->level_number,
+                    'type' => $reservation->type,
+                ]);
+    
+                // Update the columbary_slots.status to 'Available' or 'Forfeited'
+                $slot = ColumbarySlot::find($reservation->columbary_slot_id);
+                if ($slot) {
+                    $slot->status = 'Available'; // or 'Forfeited' based on your business logic
+                    $slot->save();
+                }
+    
+                // Delete the data from the payments table
+                Payment::where('columbary_slot_id', $reservation->columbary_slot_id)->delete();
+    
+                // Delete the data from the reservations table
+                $reservation->delete();
+            }
 
         return 0;
     }
 }
-
-
-
-// namespace App\Console\Commands;
-
-// use Illuminate\Console\Command;
-// use App\Models\Reservation;
-// use App\Jobs\SendReminderEmail;
-// use Carbon\Carbon;
-
-// class CheckReservations extends Command
-// {
-//     protected $signature = 'reservations:check';
-//     protected $description = 'Check reservations and send reminder emails if there are only 10 days left to pay';
-
-//     public function __construct()
-//     {
-//         parent::__construct();
-//     }
-
-//     public function handle()
-//     {
-//         // For testing purposes, check reservations made today
-//         $reservations = Reservation::where('payment_status', 'Reserved')
-//             ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila'))
-//             ->get();
-
-//         foreach ($reservations as $reservation) {
-//             SendReminderEmail::dispatch($reservation);
-//             $this->info('Reminder email sent to: ' . $reservation->buyer_email);
-//         }
-
-//         return 0;
-//     }
-// }
