@@ -152,7 +152,7 @@
 
                                 </a>
                             </h3>
-                            <p class="text-sm bg-yellow-custom p-1 px-4 text-white superbold rounded-lg"><?php echo e($client->paid_count); ?> Paid</p>
+                            <p class="text-sm bg-yellow-custom p-1 px-4 text-white superbold rounded-lg"><?php echo e($client->paid_count); ?> Owned</p>
                             <p class="text-sm bg-green-custom p-1 px-4 text-white superbold rounded-lg"><?php echo e($client->reserved_count); ?> Reserved</p>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

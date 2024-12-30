@@ -21,7 +21,7 @@ class Payment extends Model
 
     public function columbarySlot()
     {
-        return $this->belongsTo(ColumbarySlot::class);
+        return $this->belongsTo(ColumbarySlot::class, 'columbary_slot_id');
     }
 
 }

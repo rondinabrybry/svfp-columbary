@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ColumbarySlot;
 use App\Models\Payment;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -153,6 +154,8 @@ class ColumbarySlotController extends Controller
     
         // Delete the related payment records
         Payment::where('columbary_slot_id', $slot->id)->delete();
+
+        Reservation::where('columbary_slot_id', $slot->id)->delete();
     
         // Update the slot status to 'Available'
         $slot->update(['status' => 'Available']);

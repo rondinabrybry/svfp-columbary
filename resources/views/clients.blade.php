@@ -141,7 +141,7 @@
                                     {{ $client->buyer_name }}
                                 </a>
                             </h3>
-                            <p class="text-sm bg-yellow-custom p-1 px-4 text-white superbold rounded-lg">{{ $client->paid_count }} Paid</p>
+                            <p class="text-sm bg-yellow-custom p-1 px-4 text-white superbold rounded-lg">{{ $client->paid_count }} Owned</p>
                             <p class="text-sm bg-green-custom p-1 px-4 text-white superbold rounded-lg">{{ $client->reserved_count }} Reserved</p>
                         </div>
                     @endforeach

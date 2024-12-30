@@ -11,7 +11,7 @@
             <p class="text-xs bg-white p-2 text-black font-bold rounded-lg">{{ __('Available') }}</p>
             <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg">{{ __('Not Available') }}</p>
             <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg">{{ __('Reserved') }}</p>
-            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-    lg">{{ __('Sold') }}</p>
+            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">{{ __('Sold') }}</p>
         </div>
 
         <style>

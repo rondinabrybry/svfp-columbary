@@ -21,7 +21,7 @@
             <p class="text-xs bg-white p-2 text-black font-bold rounded-lg"><?php echo e(__('Available')); ?></p>
             <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg"><?php echo e(__('Not Available')); ?></p>
             <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg"><?php echo e(__('Reserved')); ?></p>
-            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-    lg"><?php echo e(__('Sold')); ?></p>
+            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg"><?php echo e(__('Sold')); ?></p>
         </div>
 
         <style>

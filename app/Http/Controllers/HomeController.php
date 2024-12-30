@@ -134,7 +134,7 @@ class HomeController extends Controller
                 }
             }
     
-            return response()->json(['message' => 'Slot reserved successfully!', 'email_status' => $emailStatus]);
+            return response()->json(['message' => 'Successful!', 'email_status' => $emailStatus]);
         } catch (\Exception $e) {
             Log::error('Error reserving slot: ' . $e->getMessage());
             return response()->json(['message' => 'An error occurred while reserving the slot.'], 500);

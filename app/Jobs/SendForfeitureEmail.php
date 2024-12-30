@@ -18,6 +18,20 @@ class SendForfeitureEmail implements ShouldQueue
     protected $reservation;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 5;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int
+     */
+    public $backoff = 60;
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -34,7 +48,23 @@ class SendForfeitureEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->reservation->buyer_email)->send(new ForfeitureMail($this->reservation));
-        Log::info('Forfeiture email sent to: ' . $this->reservation->buyer_email);
+        try {
+            Mail::to($this->reservation->buyer_email)->send(new ForfeitureMail($this->reservation));
+            Log::info('Forfeiture email sent to: ' . $this->reservation->buyer_email);
+        } catch (\Exception $e) {
+            Log::error('Failed to send forfeiture email to: ' . $this->reservation->buyer_email . '. Error: ' . $e->getMessage());
+            throw $e; // Re-throw the exception to trigger the retry mechanism
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @return void
+     */
+    public function failed()
+    {
+        // Handle the failure scenario, e.g., log the failure or notify an admin
+        Log::error('Failed to send forfeiture email to: ' . $this->reservation->buyer_email . ' after multiple attempts.');
     }
 }

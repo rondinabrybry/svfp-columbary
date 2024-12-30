@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClientController;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/send-test-mail', function () {
@@ -36,8 +37,6 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('/columbary/{id}/make-available', [ColumbarySlotController::class, 'makeAvailable'])->name('columbary.makeAvailable');
     Route::patch('/columbary/{id}/mark-not-available', [ColumbarySlotController::class, 'markNotAvailable'])->name('columbary.markNotAvailable');
 
-
-    Route::post('/columbary/reserve/{id}', [PaymentController::class, 'reserveSlot'])->name('columbary.reserve');
     Route::post('/columbary/paid/{id}', [PaymentController::class, 'markAsPaid'])->name('columbary.paid');
 
 
@@ -58,6 +57,10 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
 });
 
 require __DIR__ . '/auth.php';

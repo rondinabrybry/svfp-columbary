@@ -13,12 +13,12 @@
         <li>Slot Number: {{ $slot_number }}</li>
         <li>Unit ID: {{ $unit_id }}</li>
         <li>Floor: {{ $floor_number }}</li>
-        <li>Vault: {{ $vault_number }}</li>
+        <li>Rack: {{ chr(64 + $vault_number) }}</li>
         <li>Level: {{ $level_number }}</li>
         <li>Type: {{ $type }}</li>
-        <li>Price: ₱{{ number_format($price, 2) }}</li>
-        <li>Reservation Price: ₱{{ number_format($unit_price, 2) }}</li>
-        <li>Purchase Date: {{ $purchase_date }}</li>
+        <li>Unit Price: ₱{{ number_format($unit_price, 2) }}</li>
+        <li>Reservation Price: ₱{{ number_format($price, 2) }}</li>
+        <li>Reservation Date: {{ $purchase_date }}</li>
     </ul>
     <p>Please note that the reservation fee is not refundable.</p>
     <p>Thank you for your understanding.</p>

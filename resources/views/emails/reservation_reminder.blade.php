@@ -1,2 +1,0 @@
-<p>Dear {{ $reservation->buyer_name }},</p>
-<p>This is a reminder that your reservation for slot {{ $reservation->columbary_slot_id }} will expire on {{ $reservation->expiration_date }}. Please pay the remaining amount to secure your slot.</p>

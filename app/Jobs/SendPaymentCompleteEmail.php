@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\ReminderMail;
+use App\Mail\PaymentCompleteMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,12 +10,13 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Models\Payment;
 
-class SendReminderEmail implements ShouldQueue
+class SendPaymentCompleteEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $reservation;
+    protected $payment;
 
     /**
      * The number of times the job may be attempted.
@@ -36,9 +37,9 @@ class SendReminderEmail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($reservation)
+    public function __construct(Payment $payment)
     {
-        $this->reservation = $reservation;
+        $this->payment = $payment;
     }
 
     /**
@@ -49,10 +50,10 @@ class SendReminderEmail implements ShouldQueue
     public function handle()
     {
         try {
-            Mail::to($this->reservation->buyer_email)->send(new ReminderMail($this->reservation));
-            Log::info('Reminder email sent to: ' . $this->reservation->buyer_email);
+            Mail::to($this->payment->buyer_email)->send(new PaymentCompleteMail($this->payment));
+            Log::info('Payment complete email sent to: ' . $this->payment->buyer_email);
         } catch (\Exception $e) {
-            Log::error('Failed to send reminder email to: ' . $this->reservation->buyer_email . '. Error: ' . $e->getMessage());
+            Log::error('Failed to send payment complete email to: ' . $this->payment->buyer_email . '. Error: ' . $e->getMessage());
             throw $e; // Re-throw the exception to trigger the retry mechanism
         }
     }
@@ -65,6 +66,6 @@ class SendReminderEmail implements ShouldQueue
     public function failed()
     {
         // Handle the failure scenario, e.g., log the failure or notify an admin
-        Log::error('Failed to send reminder email to: ' . $this->reservation->buyer_email . ' after multiple attempts.');
+        Log::error('Failed to send payment complete email to: ' . $this->payment->buyer_email . ' after multiple attempts.');
     }
 }
