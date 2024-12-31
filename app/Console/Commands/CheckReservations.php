@@ -28,7 +28,7 @@ class CheckReservations extends Command
 
         // Send reminder emails for reservations with 10 days left to pay
         $reminderReservations = Reservation::where('payment_status', 'Reserved')
-            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(1))
+            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(20))
             ->get();
 
         foreach ($reminderReservations as $reservation) {
@@ -39,7 +39,7 @@ class CheckReservations extends Command
 
         // Send forfeiture emails for reservations not paid after 30 days
         $forfeitureReservations = Reservation::where('payment_status', 'Reserved')
-            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(2))
+            ->whereDate('purchase_date', '=', Carbon::now('Asia/Manila')->subDays(30))
             ->get();
 
             foreach ($forfeitureReservations as $reservation) {
