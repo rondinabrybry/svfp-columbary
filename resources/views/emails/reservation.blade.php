@@ -10,11 +10,7 @@
     <p>Dear {{ $buyer_name }},</p>
     <p>Thank you for reserving a columbary slot with us. Here are the details of your reservation:</p>
     <ul>
-        <li>Slot Number: {{ $slot_number }}</li>
         <li>Unit ID: {{ $unit_id }}</li>
-        <li>Floor: {{ $floor_number }}</li>
-        <li>Rack: {{ chr(64 + $vault_number) }}</li>
-        <li>Level: {{ $level_number }}</li>
         <li>Type: {{ $type }}</li>
         <li>Unit Price: ₱{{ number_format($unit_price, 2) }}</li>
         <li>Reservation Price: ₱{{ number_format($price, 2) }}</li>

@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="max-w-7xl text-black dark:text-white container mx-auto p-4">
-        <div class="legends flex flex-row gap-2 mb-4">
+        <div class="legends flex flex-row gap-2 mb-6">
             <p class="text-xs bg-white p-2 text-black font-bold rounded-lg">{{ __('Available') }}</p>
             <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg">{{ __('Not Available') }}</p>
             <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg">{{ __('Reserved') }}</p>
@@ -17,8 +17,7 @@
         <style>
             .slots {
                 display: flex;
-                flex-direction: row;
-                gap: 1rem;
+                flex-direction: column-reverse;
             }
 
             .column {
@@ -42,6 +41,11 @@
                 font-size: 0.875rem;
                 font-weight: bold;
                 cursor: pointer;
+            }
+
+            .level {
+                margin-bottom: 10px;
+                display: flex;
             }
 
             .level-tag {
@@ -222,10 +226,12 @@
             @foreach ($slots as $floor => $floorVaults)
                 <div class="units flex flex-row gap-6" id="units-{{ $floor }}">
                     @for ($i = 1; $i <= count($floorVaults); $i++)
-                        <p id="floor-{{ $floor }}-rack-{{ $i }}"
-                            class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
-                            {{ chr(64 + $i) }}
-                        </p>
+                        @if (isset($floorVaults[$i - 0]) && $floorVaults[$i - 0]->isNotEmpty())
+                            <p id="floor-{{ $floor }}-rack-{{ $i }}"
+                                class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
+                                {{ chr(64 + $floorVaults[$i - 0]->first()->unit_num_side) }}
+                            </p>
+                        @endif
                     @endfor
                 </div>
             @endforeach
@@ -238,25 +244,20 @@
                             <h3 class="text-lg font-medium mb-4"> {{ __('Rack') }} {{ chr(64 + $vault) }} </h3>
                             <div class="slots" id="slots-{{ $floor }}-r{{ $vault }}">
                                 @php
-                                    $columns = array_chunk($vaultSlots->toArray(), 6);
+                                    $levels = $vaultSlots->groupBy('level_number');
                                 @endphp
-                                <div class="flex flex-col gap-2" style="gap: 19.7px;">
-                                    <p class="level-tag">{{ __('Level 6: ') }}</p>
-                                    <p class="level-tag">{{ __('Level 5: ') }}</p>
-                                    <p class="level-tag">{{ __('Level 3: ') }}</p>
-                                    <p class="level-tag">{{ __('Level 4: ') }}</p>
-                                    <p class="level-tag">{{ __('Level 2: ') }}</p>
-                                    <p class="level-tag">{{ __('Level 1: ') }}</p>
-                                </div>
-                                @foreach ($columns as $column)
-                                    <div class="column">
-                                        @foreach ($column as $slot)
-                                            <div class="slot {{ strtolower(str_replace(' ', '-', $slot['status'])) }}"
-                                                data-slot-id="{{ $slot['id'] }}"
-                                                data-slot-number="{{ $slot['unit_id'] }} {{ $slot['type'] }}">
-                                                {{ $slot['unit_id'] }}
-                                            </div>
-                                        @endforeach
+                                @foreach ($levels as $level => $levelSlots)
+                                    <div class="level">
+                                        <p class="level-tag">{{ __('Level') }} {{ $level }}:</p>
+                                        <div class="level-slots flex gap-2">
+                                            @foreach ($levelSlots as $slot)
+                                                <div class="slot {{ strtolower(str_replace(' ', '-', $slot['status'])) }}"
+                                                    data-slot-id="{{ $slot['id'] }}"
+                                                    data-slot-number="{{ $slot['unit_id'] }} {{ $slot['type'] }}">
+                                                    {{ $slot['unit_id'] }}
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -265,9 +266,9 @@
                 @endforeach
             </div>
         </div>
-
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+
                 const floorCounts = document.querySelectorAll('.floor-count');
                 let activeElement = null;
 

@@ -10,11 +10,7 @@
     <p>Dear <?php echo e($buyer_name); ?>,</p>
     <p>Thank you for reserving a columbary slot with us. Here are the details of your reservation:</p>
     <ul>
-        <li>Slot Number: <?php echo e($slot_number); ?></li>
         <li>Unit ID: <?php echo e($unit_id); ?></li>
-        <li>Floor: <?php echo e($floor_number); ?></li>
-        <li>Rack: <?php echo e(chr(64 + $vault_number)); ?></li>
-        <li>Level: <?php echo e($level_number); ?></li>
         <li>Type: <?php echo e($type); ?></li>
         <li>Unit Price: ₱<?php echo e(number_format($unit_price, 2)); ?></li>
         <li>Reservation Price: ₱<?php echo e(number_format($price, 2)); ?></li>

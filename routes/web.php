@@ -7,6 +7,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VaultController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomeController2;
 use App\Http\Controllers\ClientController;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
@@ -45,10 +46,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     Route::get('/columbary/slot-info/{slotId}', [ColumbaryController::class, 'getSlotInfo'])->name('columbary.slot-info');
 
-
     Route::get('/slot-details/{slotId}', [HomeController::class, 'getSlotDetails'])->name('slot.details');
-
-
     Route::get('/home', [HomeController::class, 'showSlots'])->name('home');
     Route::post('/reserve-slot', [HomeController::class, 'reserveSlot'])->name('reserve.slot');
 
@@ -58,9 +56,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
 });
 
 require __DIR__ . '/auth.php';

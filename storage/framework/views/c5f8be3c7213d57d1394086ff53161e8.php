@@ -9,9 +9,10 @@
     <h1>Congratulations, <?php echo e($buyer_name); ?>!</h1>
     <p>We are pleased to inform you that your payment for the columbary slot has been successfully completed. You are now the owner of the following unit:</p>
     <ul>
-        <li>Slot Number: <?php echo e($slot_number); ?></li>
         <li>Unit ID: <?php echo e($unit_id); ?></li>
+        <li>Type: <?php echo e($type); ?></li>
         <li>Price: ₱<?php echo e(number_format($price, 2)); ?></li>
+        <li>Payment Date: <?php echo e($created_at); ?></li>
     </ul>
     <p>Thank you for your trust and confidence in our services. If you have any questions or need further assistance, please do not hesitate to contact us.</p>
     <p>Best regards,</p>

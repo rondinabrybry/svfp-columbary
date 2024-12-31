@@ -7,16 +7,15 @@ use App\Models\Payment;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Jobs\SendReservationEmail;
-use App\Jobs\SendPaymentCompleteEmail;
 use App\Mail\ReservationMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
-class HomeController extends Controller
+class HomeController2 extends Controller
 {
-    public function showSlots()
+    public function showSlots2()
     {
         $slots = ColumbarySlot::select(['id', 'unit_number', 'floor_number', 'vault_number', 'slot_number', 'level_number', 'status', 'side', 'type', 'unit_id', 'price', 'unit_num_side'])
             ->orderBy('floor_number')
@@ -28,10 +27,10 @@ class HomeController extends Controller
                 return $floorSlots->groupBy('vault_number');
             });
 
-        return view('home', compact('slots'));
+        return view('home2', compact('slots'));
     }
 
-    public function getSlotDetails($slotId)
+    public function getSlotDetails2($slotId)
     {
         $slot = ColumbarySlot::with('payment')->findOrFail($slotId);
 
@@ -73,7 +72,7 @@ class HomeController extends Controller
     }
 
 
-    public function reserveSlot(Request $request)
+    public function reserveSlot2(Request $request)
     {
         try {
             $request->validate([
@@ -97,7 +96,7 @@ class HomeController extends Controller
     
             $paymentStatus = $request->reservation_type === 'full' ? 'Paid' : 'Reserved';
     
-            $payment = Payment::create([
+            Payment::create([
                 'columbary_slot_id' => $slot->id,
                 'buyer_name' => $request->buyer_name,
                 'buyer_address' => $request->buyer_address,
@@ -131,15 +130,6 @@ class HomeController extends Controller
                     $emailStatus = 'Email sent successfully';
                 } catch (\Exception $e) {
                     Log::error('Error sending reservation email: ' . $e->getMessage());
-                    $emailStatus = 'Failed to send email';
-                }
-            } elseif ($slot->status === 'Sold' || $slot->status === 'Paid') {
-                try {
-                    // Dispatch the job to send the payment complete email
-                    SendPaymentCompleteEmail::dispatch($payment);
-                    $emailStatus = 'Email sent successfully';
-                } catch (\Exception $e) {
-                    Log::error('Error sending payment complete email: ' . $e->getMessage());
                     $emailStatus = 'Failed to send email';
                 }
             }

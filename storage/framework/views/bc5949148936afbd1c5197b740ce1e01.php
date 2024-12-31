@@ -11,7 +11,7 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <?php echo e(__('Columbary Slots')); ?>
+            <?php echo e(__('Columbary Slots 2')); ?>
 
         </h2>
      <?php $__env->endSlot(); ?>
@@ -417,7 +417,7 @@
                 const modalBody = modal.querySelector('.modal-body');
 
                 function renderReservationForm(slotId, slotNumber) {
-                    fetch(`/slot-details/${slotId}`)
+                    fetch(`/slot-details2/${slotId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (!data.price) {
@@ -518,7 +518,7 @@
                                 reserveButton.disabled = true;
                                 loadingSpinner.style.display = 'block';
 
-                                fetch("<?php echo e(route('reserve.slot')); ?>", {
+                                fetch("<?php echo e(route('reserve.slot2')); ?>", {
                                         method: "POST",
                                         body: formData,
                                         headers: {
@@ -625,4 +625,4 @@
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
 <?php endif; ?>
-<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/home.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/home2.blade.php ENDPATH**/ ?>

@@ -9,7 +9,7 @@ class ColumbarySlot extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['slot_number', 'status', 'price', 'floor_number', 'vault_number', 'level_number', 'type'];
+    protected $fillable = ['slot_number', 'status', 'price', 'floor_number', 'vault_number', 'level_number', 'type', 'unit_num_side'];
 
     public function payment()
     {

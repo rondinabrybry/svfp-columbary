@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Payment;
+use Carbon\Carbon;
 
 class PaymentCompleteMail extends Mailable
 {
@@ -29,7 +30,9 @@ class PaymentCompleteMail extends Mailable
                         'buyer_name' => $this->payment->buyer_name,
                         'slot_number' => $columbarySlot->slot_number,
                         'unit_id' => $columbarySlot->unit_id,
+                        'type' => $columbarySlot->type,
                         'price' => $this->payment->price,
+                        'created_at' => Carbon::parse($this->payment->created_at)->format('M d, Y'),
                     ]);
     }
 }

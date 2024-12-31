@@ -1,27 +1,17 @@
 <!-- filepath: /C:/xampp/htdocs/LARAVEL/columbary/svfp/resources/views/home.blade.php -->
-<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
-<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('app-layout'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-     <?php $__env->slot('header', null, []); ?> 
+<x-app-layout>
+    <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <?php echo e(__('Columbary Slots')); ?>
-
+            {{ __('Columbary Slots 2') }}
         </h2>
-     <?php $__env->endSlot(); ?>
+    </x-slot>
 
     <div class="max-w-7xl text-black dark:text-white container mx-auto p-4">
         <div class="legends flex flex-row gap-2 mb-6">
-            <p class="text-xs bg-white p-2 text-black font-bold rounded-lg"><?php echo e(__('Available')); ?></p>
-            <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg"><?php echo e(__('Not Available')); ?></p>
-            <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg"><?php echo e(__('Reserved')); ?></p>
-            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg"><?php echo e(__('Sold')); ?></p>
+            <p class="text-xs bg-white p-2 text-black font-bold rounded-lg">{{ __('Available') }}</p>
+            <p class="text-xs bg-[#ef4444] p-2 text-white font-bold rounded-lg">{{ __('Not Available') }}</p>
+            <p class="text-xs bg-[#3b82f6] p-2 text-white font-bold rounded-lg">{{ __('Reserved') }}</p>
+            <p class="text-xs bg-[#facc15] p-2 text-black font-bold rounded-lg">{{ __('Sold') }}</p>
         </div>
 
         <style>
@@ -225,58 +215,55 @@
 
         <div id="slotsContainer" style="display: none;">
             <div class="floors flex flex-row gap-6">
-                <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="floor mb-8" data-floor="<?php echo e($floor); ?>">
-                        <h2 class="text-2xl text-black dark:text-white font-semibold mb-4"><?php echo e(__('Floor')); ?>
-
-                            <?php echo e($floor); ?></h2>
+                @foreach ($slots as $floor => $floorVaults)
+                    <div class="floor mb-8" data-floor="{{ $floor }}">
+                        <h2 class="text-2xl text-black dark:text-white font-semibold mb-4">{{ __('Floor') }}
+                            {{ $floor }}</h2>
                     </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                @endforeach
             </div>
 
-            <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="units flex flex-row gap-6" id="units-<?php echo e($floor); ?>">
-                    <?php for($i = 1; $i <= count($floorVaults); $i++): ?>
-                        <?php if(isset($floorVaults[$i - 0]) && $floorVaults[$i - 0]->isNotEmpty()): ?>
-                            <p id="floor-<?php echo e($floor); ?>-rack-<?php echo e($i); ?>"
+            @foreach ($slots as $floor => $floorVaults)
+                <div class="units flex flex-row gap-6" id="units-{{ $floor }}">
+                    @for ($i = 1; $i <= count($floorVaults); $i++)
+                        @if (isset($floorVaults[$i - 0]) && $floorVaults[$i - 0]->isNotEmpty())
+                            <p id="floor-{{ $floor }}-rack-{{ $i }}"
                                 class="floor-count bg-white rounded-lg px-4 py-2 text-black cursor-pointer">
-                                <?php echo e(chr(64 + $floorVaults[$i - 0]->first()->unit_num_side)); ?>
-
+                                {{ chr(64 + $floorVaults[$i - 0]->first()->unit_num_side) }}
                             </p>
-                        <?php endif; ?>
-                    <?php endfor; ?>
+                        @endif
+                    @endfor
                 </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            @endforeach
 
             <div class="vaults flex flex-wrap gap-6">
-                <?php $__currentLoopData = $slots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor => $floorVaults): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php $__currentLoopData = $floorVaults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vault => $vaultSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                @foreach ($slots as $floor => $floorVaults)
+                    @foreach ($floorVaults as $vault => $vaultSlots)
                         <div class="vault border rounded-lg p-4 mt-4 not-pop"
-                            id="f<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
-                            <h3 class="text-lg font-medium mb-4"> <?php echo e(__('Rack')); ?> <?php echo e(chr(64 + $vault)); ?> </h3>
-                            <div class="slots" id="slots-<?php echo e($floor); ?>-r<?php echo e($vault); ?>">
-                                <?php
+                            id="f{{ $floor }}-r{{ $vault }}">
+                            <h3 class="text-lg font-medium mb-4"> {{ __('Rack') }} {{ chr(64 + $vault) }} </h3>
+                            <div class="slots" id="slots-{{ $floor }}-r{{ $vault }}">
+                                @php
                                     $levels = $vaultSlots->groupBy('level_number');
-                                ?>
-                                <?php $__currentLoopData = $levels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $level => $levelSlots): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                @endphp
+                                @foreach ($levels as $level => $levelSlots)
                                     <div class="level">
-                                        <p class="level-tag"><?php echo e(__('Level')); ?> <?php echo e($level); ?>:</p>
+                                        <p class="level-tag">{{ __('Level') }} {{ $level }}:</p>
                                         <div class="level-slots flex gap-2">
-                                            <?php $__currentLoopData = $levelSlots; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <div class="slot <?php echo e(strtolower(str_replace(' ', '-', $slot['status']))); ?>"
-                                                    data-slot-id="<?php echo e($slot['id']); ?>"
-                                                    data-slot-number="<?php echo e($slot['unit_id']); ?> <?php echo e($slot['type']); ?>">
-                                                    <?php echo e($slot['unit_id']); ?>
-
+                                            @foreach ($levelSlots as $slot)
+                                                <div class="slot {{ strtolower(str_replace(' ', '-', $slot['status'])) }}"
+                                                    data-slot-id="{{ $slot['id'] }}"
+                                                    data-slot-number="{{ $slot['unit_id'] }} {{ $slot['type'] }}">
+                                                    {{ $slot['unit_id'] }}
                                                 </div>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            @endforeach
                                         </div>
                                     </div>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                @endforeach
                             </div>
                         </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    @endforeach
+                @endforeach
             </div>
         </div>
         <script>
@@ -374,9 +361,9 @@
             class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
                 <div class="modal-header flex justify-between items-center border-b pb-3">
-                    <h5 id="reservationModalLabel" class="text-xl font-semibold"><?php echo e(__('Reserve Unit')); ?></h5><br>
+                    <h5 id="reservationModalLabel" class="text-xl font-semibold">{{ __('Reserve Unit') }}</h5><br>
                     <button type="button" id="closeModal"
-                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"><?php echo e(__('Close')); ?></button>
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">{{ __('Close') }}</button>
                 </div>
                 <div class="modal-body mt-4">
                     <div id="manilaTime">
@@ -417,7 +404,7 @@
                 const modalBody = modal.querySelector('.modal-body');
 
                 function renderReservationForm(slotId, slotNumber) {
-                    fetch(`/slot-details/${slotId}`)
+                    fetch(`/slot-details2/${slotId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (!data.price) {
@@ -427,7 +414,7 @@
 
                             const formHtml = `
             <form id="reservationForm">
-                <?php echo csrf_field(); ?>
+                @csrf
                 <input type="hidden" name="slot_id" id="slotId" value="${slotId}">
                 <input type="hidden" name="price" id="price">
 
@@ -518,7 +505,7 @@
                                 reserveButton.disabled = true;
                                 loadingSpinner.style.display = 'block';
 
-                                fetch("<?php echo e(route('reserve.slot')); ?>", {
+                                fetch("{{ route('reserve.slot2') }}", {
                                         method: "POST",
                                         body: formData,
                                         headers: {
@@ -615,14 +602,4 @@
                 });
             });
         </script>
- <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
-<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
-<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
-<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
-<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\xampp\htdocs\LARAVEL\columbary\svfp\resources\views/home.blade.php ENDPATH**/ ?>
+</x-app-layout>
